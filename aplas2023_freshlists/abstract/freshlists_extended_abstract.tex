@@ -1,0 +1,155 @@
+% easychair.tex,v 3.5 2017/03/15
+
+\documentclass[a4paper]{easychair}
+%\documentclass[EPiC]{easychair}
+%\documentclass[EPiCempty]{easychair}
+%\documentclass[debug]{easychair}
+%\documentclass[verbose]{easychair}
+%\documentclass[notimes]{easychair}
+%\documentclass[withtimes]{easychair}
+%\documentclass[a4paper]{easychair}
+%\documentclass[letterpaper]{easychair}
+
+\usepackage{doc}
+
+% use this if you have a long article and want to create an index
+% \usepackage{makeidx}
+
+% In order to save space or manage large tables or figures in a
+% landcape-like text, you can use the rotating and pdflscape
+% packages. Uncomment the desired from the below.
+%
+% \usepackage{rotating}
+% \usepackage{pdflscape}
+
+\title{Extensional Finite Sets and Multisets in Agda}
+
+\author{
+%Clemens Kupke
+%\and
+%Fredrik Nordvall Forsberg
+%\and
+Sean Watters%\thanks{Speaker}
+}
+
+\institute{
+  University of Strathclyde, UK\\
+  %\email{\{clemens.kupke, fredrik.nordvall-forsberg, sean.watters\}@strath.ac.uk}
+  \email{sean.watters@strath.ac.uk}
+ }
+
+ \authorrunning{
+   %Kupke, Nordvall Forsberg and
+   Watters}
+\titlerunning{A Fresh Look at Commutativity}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+  This is joint work with Clemens Kupke and Fredrik Nordvall Forsberg,
+  and was published at APLAS 2023~\cite{freshlists}.
+
+The type of lists is one of the most elementary inductive data types.
+It has been studied and used extensively by computer scientists and programmers for decades.
+Two conceptually similar structures are those of finite sets and multisets, which can be thought of as unordered analogues to lists.
+However, capturing unordered structures in a data type while maintaining desirable properties such as decidable equality and the correct equational theory is challenging.
+
+The usual approach to formalise unordered structures in mathematics
+is to represent them as functions (with finite support): finite sets as $X \to 2$, and finite multisets as $X \to \mathbb{N}$, respectively.
+However, these representations do not enjoy decidable equality, even if the underlying type $X$ does.
+
+The approach taken in most programming languages is to pretend --- one uses a list (or another ordered structure for efficiency) internally, but hides it and any invariants behind a layer of abstraction provided by an API.
+However, each set or multiset can then be represented by many different lists,
+meaning that the equational theory might not be correct. This is a problem
+in a dependently typed setting, where
+having equality as a first-class type allows us to
+distinguish between different representations of the same set.
+
+The analogous approach in dependent type theory is to encode these invariants in an equivalence relation on lists,
+and define finite sets and multisets as setoids of lists plus the appropriate equivalence relation~\cite{setoids}.
+However, this merely side-steps the issue;
+we may still have two distinct lists which represent the same finite (multi)set.
+Thus, we are forced to work with the equivalence relation at all times instead of the identity type.
+
+In the setting of homotopy type theory~\cite{hottbook} (HoTT), we can use higher inductive types (HITs) to define the identities on an inductive type simultaneously with its elements.
+This allows us to bridge the gap from the setoid approach to obtain a data type which enjoys both decidable equality and the right equational theory, as demonstrated by Choudhury and Fiore~\cite{choudhury2023free}.
+
+However, it may not always be possible to work in HoTT;
+thus, the main question we set out to answer in this work is
+whether it is possible in ordinary dependent type theory
+to define data types of finite sets and multisets, which:
+\begin{enumerate}[(i)]
+  \item have decidable equality iff the underlying set has decidable equality; and \label{item:success1}
+  \item satisfy the equational theories of finite sets and multisets. \label{item:success2}
+\end{enumerate}
+
+For the latter, we take as our success criteria the facts that
+the type of finite sets is the free idempotent commutative monoid~\cite{finsetHott} %(also called the free bounded lattice),
+and that finite multisets are the free commutative monoid.
+Thus, we are really aiming to find data types for the free idempotent commutative monoid and free commutative monoid, which satisfy the above property \ref{item:success1}.
+We accomplish this by restricting our attention to only those sets with decidable equality that can be totally ordered.
+We can then form a type of sorted lists over such a set.
+Provided we treat the existence of the ordering data carefully, this type turns out to give us exactly finite sets when the order is strict, and finite multisets when it is non-strict.
+
+We show that our constructions satisfy universal properties, in the sense that they are left adjoints to forgetful functors --- this is the standard way to state freeness in the language of category theory.
+However, note that the notion of freeness is with respect to e.g.\ totally ordered monoids, rather than all monoids.
+For proving the universal properties and for defining the categories involved, we need function extensionality.
+Nevertheless the constructions themselves work in ordinary dependent type theory.
+
+\paragraph{Related Work}%
+\phantomsection
+\addcontentsline{toc}{subsection}{Related Work}
+Fresh lists, the key inductive data type of this work, were first introduced by C.~Coquand to represent contexts in the simply typed lambda calculus~\cite{coquand-formal-stlc},
+and then highlighted as an example of an inductive-recursive definition by Dybjer~\cite{dybjer00}.
+The particular notion of fresh list discussed here is a minor variation of the version found in the Agda standard library~\cite{agda-stdlib},
+which generalises the notion of freshness %between individual elements
+to an arbitrary relation.
+
+In Section~\ref{sec:freeICM} we discuss sorted lists and finite sets, both of which have been extensively investigated in the past.
+Sorted lists are one of the archetypal examples of a dependent type, with one particularly elegant treatment of them being given by McBride~\cite{mcbride2014keep}.
+Meanwhile, Appel and Leroy~\cite{appel2023} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
+These can be used to construct finite sets with elements from the index type (positive natural numbers for  Appel and Leroy).
+The use of tries allows for significantly improved lookup performance compared to lists, and with more work, it is conceivable that finite sets with elements from an arbitrary but fixed first-order data type could be extensionally represented this way~\cite{hinzeTries}.
+Our representation using sorted lists is not as efficient, but on the other hand works uniformly in the element type, as long as it is equipped with a total order.
+
+In the setting of HoTT, there is a significant body of existing work.
+Choudhury and Fiore~\cite{choudhury2023free} give a treatment of finite multisets, showing how they can be constructed using HITs.
+Joram and Veltri~\cite{joram2023} continue this thread with a treatment of the final coalgebra of the finite multiset functor.
+Earlier, Piceghello's PhD thesis~\cite{piceghello2021thesis} investigated coherence for symmetric monoidal groupoids, showing an equivalence between free symmetric monoidal groupoids and sorted lists.
+Building on this, Choudhury et al.~\cite{vikramanSymGroup} investigated the relationship between sorting algorithms and the symmetric group $S_{n}$, as part of a study of the groupoid semantics of reversible programming languages.
+
+
+
+\paragraph{Contributions}%
+\phantomsection
+\addcontentsline{toc}{subsection}{Contributions}
+We make the following contributions:
+\begin{itemize}
+\item We show how finite sets and multisets can be
+  constructed in ordinary dependent type theory, without using
+  quotient types or working with setoids.
+\item We prove that, assuming function extensionality, our finite sets
+  construction forms a free-forgetful adjunction between the category
+  of sets equipped with an order relation, and the category of
+  idempotent, commutative monoids equipped with an order relation. Similarly our finite multisets
+  construction form an adjunction between sets equipped with an order
+  relation and the category of commutative monoids equipped with an order relation.
+\item We show how the above constructions arise from instantiations of
+  the data type of fresh lists, and how other instantiations give free left-regular band monoids, free reflexive partial
+  monoids, free monoids, and free pointed sets.
+\end{itemize}
+\end{abstract}
+
+
+\bibliographystyle{plain}
+%\bibliographystyle{alpha}
+%\bibliographystyle{unsrt}
+%\bibliographystyle{abbrv}
+\bibliography{extabs}
+
+%------------------------------------------------------------------------------
+\end{document}
+

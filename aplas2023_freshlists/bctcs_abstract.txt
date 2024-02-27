@@ -1,0 +1,15 @@
+Title: Extensional Finite Sets and Multisets in Agda
+
+Lists and list-like types are easy to represent in type theory.
+However, sets and multisets are more troublesome; without
+advanced features such as quotient types, representations of them
+typically lack decidable equality, extensionality, or both. In this
+talk, I will discuss how to realise finite sets and multisets as
+free idempotent commutative monoids and free commutative monoids,
+using a generalisation of Catarina Coquand's data type of fresh lists.
+I will also show how many other free structures also can be realised
+using this data type.
+
+This is joint work with Clemens Kupke and Fredrik Nordvall
+Forsberg, and was published at APLAS 2023:
+https://doi.org/10.1007/978-981-99-8311-7_7
