@@ -12,6 +12,14 @@
 
 \usepackage{doc}
 
+% Maths fonts and stuff
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{mathabx}
+\usepackage[greek,english]{babel}
+\usepackage{mathtools}
+
 % use this if you have a long article and want to create an index
 % \usepackage{makeidx}
 
@@ -61,7 +69,7 @@ The usual approach to formalise unordered structures in mathematics
 is to represent them as functions (with finite support): finite sets as $X \to 2$, and finite multisets as $X \to \mathbb{N}$, respectively.
 However, these representations do not enjoy decidable equality, even if the underlying type $X$ does.
 
-The approach taken in most programming languages is to pretend --- one uses a list (or another ordered structure for efficiency) internally, but hides it and any invariants behind a layer of abstraction provided by an API.
+Meanwhile the approach taken in most software is to pretend --- one uses a list (or another ordered structure for efficiency) internally, but hides it and any invariants behind a layer of abstraction provided by an API.
 However, each set or multiset can then be represented by many different lists,
 meaning that the equational theory might not be correct. This is a problem
 in a dependently typed setting, where
@@ -69,25 +77,25 @@ having equality as a first-class type allows us to
 distinguish between different representations of the same set.
 
 The analogous approach in dependent type theory is to encode these invariants in an equivalence relation on lists,
-and define finite sets and multisets as setoids of lists plus the appropriate equivalence relation~\cite{setoids}.
+and define finite sets and multisets as setoids of lists plus the appropriate equivalence relation~\cite{gilles2003setoids}.
 However, this merely side-steps the issue;
 we may still have two distinct lists which represent the same finite (multi)set.
 Thus, we are forced to work with the equivalence relation at all times instead of the identity type.
 
-In the setting of homotopy type theory~\cite{hottbook} (HoTT), we can use higher inductive types (HITs) to define the identities on an inductive type simultaneously with its elements.
-This allows us to bridge the gap from the setoid approach to obtain a data type which enjoys both decidable equality and the right equational theory, as demonstrated by Choudhury and Fiore~\cite{choudhury2023free}.
+In the setting of homotopy type theory (HoTT)~\cite{hottbook}, we can use higher inductive types (HITs) to define the identities on an inductive type simultaneously with its elements.
+This allows us to bridge the gap from the setoid approach to obtain a data type which enjoys both decidable equality and the right equational theory, as demonstrated by Choudhury and Fiore~\cite{choudhuryfiore2023freecommmon}.
 
 However, it may not always be possible to work in HoTT;
 thus, the main question we set out to answer in this work is
 whether it is possible in ordinary dependent type theory
 to define data types of finite sets and multisets, which:
-\begin{enumerate}[(i)]
+\begin{enumerate}
   \item have decidable equality iff the underlying set has decidable equality; and \label{item:success1}
   \item satisfy the equational theories of finite sets and multisets. \label{item:success2}
 \end{enumerate}
 
 For the latter, we take as our success criteria the facts that
-the type of finite sets is the free idempotent commutative monoid~\cite{finsetHott} %(also called the free bounded lattice),
+the type of finite sets is the free idempotent commutative monoid~\cite{frumin2018finsetshott}.
 and that finite multisets are the free commutative monoid.
 Thus, we are really aiming to find data types for the free idempotent commutative monoid and free commutative monoid, which satisfy the above property \ref{item:success1}.
 We accomplish this by restricting our attention to only those sets with decidable equality that can be totally ordered.
@@ -100,16 +108,14 @@ For proving the universal properties and for defining the categories involved, w
 Nevertheless the constructions themselves work in ordinary dependent type theory.
 
 \paragraph{Related Work}%
-\phantomsection
-\addcontentsline{toc}{subsection}{Related Work}
-Fresh lists, the key inductive data type of this work, were first introduced by C.~Coquand to represent contexts in the simply typed lambda calculus~\cite{coquand-formal-stlc},
+Fresh lists, the key inductive data type of this work, were first introduced by C.~Coquand to represent contexts in the simply typed lambda calculus~\cite{ccoquand2002formalstlc},
 and then highlighted as an example of an inductive-recursive definition by Dybjer~\cite{dybjer00}.
 The particular notion of fresh list discussed here is a minor variation of the version found in the Agda standard library~\cite{agda-stdlib},
 which generalises the notion of freshness %between individual elements
 to an arbitrary relation.
 
 In Section~\ref{sec:freeICM} we discuss sorted lists and finite sets, both of which have been extensively investigated in the past.
-Sorted lists are one of the archetypal examples of a dependent type, with one particularly elegant treatment of them being given by McBride~\cite{mcbride2014keep}.
+Sorted lists are one of the archetypal examples of a dependent type, with one particularly elegant treatment of them being given by McBride~\cite{mcbride2014neighbours}.
 Meanwhile, Appel and Leroy~\cite{appel2023} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
 These can be used to construct finite sets with elements from the index type (positive natural numbers for  Appel and Leroy).
 The use of tries allows for significantly improved lookup performance compared to lists, and with more work, it is conceivable that finite sets with elements from an arbitrary but fixed first-order data type could be extensionally represented this way~\cite{hinzeTries}.
@@ -124,8 +130,6 @@ Building on this, Choudhury et al.~\cite{vikramanSymGroup} investigated the rela
 
 
 \paragraph{Contributions}%
-\phantomsection
-\addcontentsline{toc}{subsection}{Contributions}
 We make the following contributions:
 \begin{itemize}
 \item We show how finite sets and multisets can be
