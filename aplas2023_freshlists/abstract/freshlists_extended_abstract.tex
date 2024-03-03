@@ -12,6 +12,7 @@
 
 \usepackage{doc}
 \usepackage{array}
+\usepackage{enumerate}
 
 % Maths fonts and stuff
 \usepackage{amsmath}
@@ -21,8 +22,26 @@
 \usepackage[greek,english]{babel}
 \usepackage{mathtools}
 
+% theorem environment
+\newtheorem{theorem}{Theorem}
+
 % agda
 \usepackage[bw]{agda}
+
+
+\newcommand\bv[1]{{\AgdaBound{$#1$}}}
+\newcommand{\flistsymb}{\AgdaDatatype{FList}}
+\newcommand{\flist}[2]{\ensuremath{\flistsymb(#1,#2)}}
+
+\newcommand\nil{\AgdaInductiveConstructor{nil}}
+\newcommand\mergesymb{\cup}
+
+\newcommand\setuniv{\mathsf{Set}} % the universe of sets
+\newcommand\propuniv{\mathsf{Prop}} % the universe of propositions
+\newcommand\sto{\mathsf{STO}}
+\newcommand\oicm{\mathsf{OICMon}}
+\newcommand{\Forget}{\mathcal{U}}
+\newcommand\forgetoicm{\Forget : \oicm{} \to{} \sto{}}
 
 % use this if you have a long article and want to create an index
 % \usepackage{makeidx}
@@ -90,19 +109,19 @@ distinguish between different representations of the same set.
 % Thus, we are forced to work with the equivalence relation at all times instead of the identity type.
 
 In the setting of homotopy type theory (HoTT)~\cite{hottbook}, we can use higher inductive types (HITs) to define the identities on an inductive type simultaneously with its elements.
-This allows us to bridge the gap from the setoid approach to obtain a data type which enjoys both decidable equality and the right equational theory, as demonstrated by Choudhury and Fiore~\cite{choudhuryfiore2023freecommmon}.
+This allows us to define a data type which enjoys both decidable equality and the right equational theory, as demonstrated by Choudhury and Fiore~\cite{choudhuryfiore2023freecommmon}.
 
 However, it may not always be possible to work in HoTT;
 thus, the main question we set out to answer in this work is
 whether it is possible in ordinary dependent type theory
 to define data types of finite sets and multisets, which:
-\begin{enumerate}
-  \item have decidable equality iff the underlying set has decidable equality; and \label{item:success1}
-  \item satisfy the equational theories of finite sets and multisets. \label{item:success2}
+\begin{enumerate}[(i)]
+  \item have decidable equality iff the underlying set has decidable equality; and\label{item:success1}
+  \item satisfy the equational theories of finite sets and multisets.\label{item:success2}
 \end{enumerate}
 
 For the latter, we take as our success criteria the facts that
-the type of finite sets is the free idempotent commutative monoid~\cite{frumin2018finsetshott}.
+the type of finite sets is the free idempotent commutative monoid~\cite{frumin2018finsetshott},
 and that finite multisets are the free commutative monoid.
 Thus, we are really aiming to find data types for the free idempotent commutative monoid and free commutative monoid, which satisfy the above property \ref{item:success1}.
 We accomplish this by restricting our attention to only those sets with decidable equality that can be totally ordered.
@@ -114,8 +133,45 @@ However, note that the notion of freeness is with respect to e.g.\ totally order
 For proving the universal properties and for defining the categories involved, we need function extensionality.
 Nevertheless the constructions themselves work in ordinary dependent type theory.
 
+\paragraph{Fresh Lists}
+Fresh lists, the key inductive data type of this work, were first introduced by C.~Coquand to represent contexts in the simply typed lambda calculus~\cite{ccoquand2002formalstlc}.
+The type of fresh lists is a parameterised data type similar to the type of ordinary lists,
+with the additional requirement that in order to adjoin
+a new element $\bv{x}$ to a list $\bv{xs}$, that element $\bv{x}$ must be ``fresh'' with respect to all other elements already present in the list $\bv{xs}$.
+We follow the Agda standard library~\cite{agda-stdlib} in considering a generalised notion of freshness, given by an arbitrary binary relation on the carrier set.
 
-Different instantiations of fresh lists yield different free structures, whose universal properties we prove, again by free-forgetful adjunctions.
+%% definition here??
+
+
+\paragraph{Finite Sets as Sorted Lists}
+We focus our attention for this talk on the case of sorted lists without duplicates.
+We first define the type of sorted lists as an appropriate instantiation of the type of fresh lists;
+namely, \flist{A}{<} for some type $A : \setuniv$ and relation $<~:~A \to A \to \propuniv$.
+We then prove the following extensionality principle which allows us to show that \flist{A}{<} is an idempotent commutative monoid
+with the empty list \nil{} as the unit,
+and the operation $\mergesymb{}$ which merges two sorted lists as the multiplication:
+
+\begin{theorem}
+Given sorted lists $xs,ys : \flist{A}{<}$, we have $(a \in xs) \longleftrightarrow (a \in ys)$ for all $a : A$ iff $xs = ys$.
+\qed()
+\end{theorem}
+
+We would like to show that this is the \emph{free} idempotent commutative monoid.
+However, there is a wrinkle --- the domain of the sorted list functor cannot be $\setuniv$;
+in order to form the type of sorted lists, we require that the underlying set be equipped with a strict total order.
+We require the data provided by the ordering to perform sorting (and crucially, to implement $\mergesymb{}$).
+Such an order cannot be freely derived for arbitrary sets; this is a strongly classical axiom called the Ordering Principle which implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
+
+Thus, we define the categories $\sto$ of strict totally ordered sets, and
+$\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor).
+With the categories in place, we can prove that the type of sorted lists is functorial, and left adjoint to the forgetful functor $\forgetoicm$.
+
+\paragraph{Other Results}
+
+The proof for sorted lists with duplicates (ie, fresh lists over a total order $\leq$) is largely the same, however we obtain a different extensionality principle.
+Since the membership relation for multisets is valued in $\setuniv$ rather than $\propuniv$, we must prove an isomorphism rather than merely a bijection.
+
+Different instantiations of the freshness relation yield different free structures, whose universal properties we prove, again by free-forgetful adjunctions.
 These results are summarised informally as follows, for some carrier set $A$:
 
 \begin{center}
@@ -123,8 +179,8 @@ These results are summarised informally as follows, for some carrier set $A$:
   \hline
   Freshness Relation & \centering{Data Structure} & \centering{Free Algebraic Structure} \tabularnewline
   \hline
-  Total order, $\leq$ & Sorted lists & Ordered Commutative Monoid \\
-  Strict total order, $<$ & Sorted lists without duplicates & Ordered Idempotent Commutative Monoid \\
+  $\leq$, a total order & Sorted lists & Ordered Commutative Monoid \\
+  $<$, a strict total order & Sorted lists without duplicates & Ordered Idempotent Commutative Monoid \\
   \AgdaFunction{$const_{2}$}~$\bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
   \AgdaFunction{$const_{2}$}~$\top$ & \AgdaDatatype{List} & Monoid \\
   $\neq$ & Lists without duplicates & Left-Regular Band Monoid \\
@@ -133,45 +189,6 @@ These results are summarised informally as follows, for some carrier set $A$:
 \end{tabular}
 \end{center}
 
-
-% \paragraph{Related Work}%
-% Fresh lists, the key inductive data type of this work, were first introduced by C.~Coquand to represent contexts in the simply typed lambda calculus~\cite{ccoquand2002formalstlc},
-% and then highlighted as an example of an inductive-recursive definition by Dybjer~\cite{dybjer00}.
-% The particular notion of fresh list discussed here is a minor variation of the version found in the Agda standard library~\cite{agda-stdlib},
-% which generalises the notion of freshness %between individual elements
-% to an arbitrary relation.
-
-% In Section~\ref{sec:freeICM} we discuss sorted lists and finite sets, both of which have been extensively investigated in the past.
-% Sorted lists are one of the archetypal examples of a dependent type, with one particularly elegant treatment of them being given by McBride~\cite{mcbride2014neighbours}.
-% Meanwhile, Appel and Leroy~\cite{appel2023} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
-% These can be used to construct finite sets with elements from the index type (positive natural numbers for  Appel and Leroy).
-% The use of tries allows for significantly improved lookup performance compared to lists, and with more work, it is conceivable that finite sets with elements from an arbitrary but fixed first-order data type could be extensionally represented this way~\cite{hinzeTries}.
-% Our representation using sorted lists is not as efficient, but on the other hand works uniformly in the element type, as long as it is equipped with a total order.
-
-% In the setting of HoTT, there is a significant body of existing work.
-% Choudhury and Fiore~\cite{choudhury2023free} give a treatment of finite multisets, showing how they can be constructed using HITs.
-% Joram and Veltri~\cite{joram2023} continue this thread with a treatment of the final coalgebra of the finite multiset functor.
-% Earlier, Piceghello's PhD thesis~\cite{piceghello2021thesis} investigated coherence for symmetric monoidal groupoids, showing an equivalence between free symmetric monoidal groupoids and sorted lists.
-% Building on this, Choudhury et al.~\cite{vikramanSymGroup} investigated the relationship between sorting algorithms and the symmetric group $S_{n}$, as part of a study of the groupoid semantics of reversible programming languages.
-
-
-
-% \paragraph{Contributions}%
-% We make the following contributions:
-% \begin{itemize}
-% \item We show how finite sets and multisets can be
-%   constructed in ordinary dependent type theory, without using
-%   quotient types or working with setoids.
-% \item We prove that, assuming function extensionality, our finite sets
-%   construction forms a free-forgetful adjunction between the category
-%   of sets equipped with an order relation, and the category of
-%   idempotent, commutative monoids equipped with an order relation. Similarly our finite multisets
-%   construction form an adjunction between sets equipped with an order
-%   relation and the category of commutative monoids equipped with an order relation.
-% \item We show how the above constructions arise from instantiations of
-%   the data type of fresh lists, and how other instantiations give free left-regular band monoids, free reflexive partial
-%   monoids, free monoids, and free pointed sets.
-% \end{itemize}
 \end{abstract}
 
 
