@@ -187,34 +187,35 @@ and the operation which merges two sorted lists as the multiplication.
 %\end{theorem}
 
 To establish~\eqref{item:success2}, we would like to show that this type is the \emph{free} idempotent commutative monoid.
-However, there is a wrinkle --- the domain of the sorted list functor cannot be $\setuniv$.
-In order to form the type of sorted lists, we require that the underlying set be equipped with a strict total order.
+However, there is a wrinkle --- the domain of the sorted list functor cannot be simply the category of sets $\setuniv$, since we require that the underlying set is equipped with a strict total order in order to form the type of sorted lists.
 % since we require the data provided by the ordering to implement the monoid multiplication.
 Assuming that any set can be equipped with such an order is a strongly classical axiom called the Ordering Principle which implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
 Therefore, we must restrict the domain of the functor to strictly totally ordered sets.
-
+%
 Thus, we define the categories $\sto$ of strictly totally ordered sets, and
 $\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor).
 With the categories in place, we can prove that the type of sorted lists is functorial, and left adjoint to the forgetful functor $\forgetoicm$, giving us the desired universal property.
 
 \paragraph{Other Results}
 
-The proof that finite multisets are represented by sorted lists with duplicates (ie, fresh lists over a total order $\leq$) is largely the same,
+The proof that finite multisets are represented by sorted lists with duplicates (i.e., fresh lists over a total order $\leq$) is largely the same,
 however we obtain a different extensionality principle:
 since the membership relation for multisets is valued in $\setuniv$ rather than $\propuniv$, we must prove an isomorphism rather than merely a bi-implication.
 
-We conclude the talk by investigating other instantiations of the freshness relation,
+We conclude %the talk
+by investigating other instantiations of the freshness relation,
 finding that each yields a different free structure.
 %whose universal property we prove.
-These results are summarised informally as follows, for some carrier set $A$:
+These results are summarised %informally
+as follows, for carrier set $A$.
 
 \begin{center}
-\begin{tabular}{  |c|m{11em}|m{15em}| }
+\begin{tabular}{  |c|m{12em}|m{16em}| }
   \hline
   Freshness Relation & \centering{Data Structure} & \centering{Free Algebraic Structure} \tabularnewline
   \hline
   $\leq$, a total order & Sorted lists & Ordered Commutative Monoid \\
-  $<$, a strict total order & Sorted lists without duplicates & Ordered Idempotent Commutative Monoid \\
+  $<$, a strict total order & Sorted lists w/o duplicates & Ordered Idempotent Comm.\ Monoid \\
   $\bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
   $\top$ & \AgdaDatatype{List} & Monoid \\
   $\neq$ & Lists without duplicates & Left-Regular Band Monoid \\
