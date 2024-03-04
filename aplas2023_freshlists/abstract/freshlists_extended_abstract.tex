@@ -146,7 +146,7 @@ The type of fresh lists is a parameterised data type similar to the type of ordi
 with the additional requirement that in order to adjoin
 a new element $\bv{x}$ to a list $\bv{xs}$, that element $\bv{x}$ must be ``fresh'' with respect to all other elements already present in the list $\bv{xs}$.
 We follow the Agda standard library~\cite{agda-stdlib} in considering a generalised notion of freshness, given by an arbitrary binary relation on the carrier set.
-We can recover Coquand's original notion of freshness by setting the freshness relation to inequality.
+We can recover Coquand's original notion of freshness by choosing inequality as our freshness relation.
 
 %\begin{definition}
     %Given a type \ty{A} and a binary relation $\ty{R} : \ty{A} \to \ty{A} \to \univ$, we mutually inductively define a type $\flist{A}{R}$, together with a relation $\freshfor_R : A \to \flist{A}{R} \to \univ$, by the following constructors:
@@ -167,7 +167,7 @@ We obtain this by the appropriate instantiation of the type of fresh lists;
 namely, \flist{A}{<} for some type $A : \setuniv$ and a strict total order $<~:~A \to A \to \propuniv$.
 We then prove an extensionality principle analogous to set extensionality which allows us to show that \flist{A}{<} is an idempotent commutative monoid
 with the empty list \nil{} as the unit,
-and the operation which merges two sorted lists as the multiplication:
+and the operation which merges two sorted lists as the multiplication.
 
 %\begin{theorem}
 %Given sorted lists $xs,ys : \flist{A}{<}$, we have $(a \in xs) \longleftrightarrow (a \in ys)$ for all $a : A$ iff $xs = ys$.
