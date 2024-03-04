@@ -27,8 +27,20 @@
 \newtheorem{definition}{Definition}
 
 % agda
-\usepackage[bw]{agda}
-
+\definecolor{AgdaBound}{HTML}{000000}
+\definecolor{AgdaDatatype}{HTML}{000000}
+\definecolor{AgdaInductiveConstructor}{HTML}{000000}
+\newcommand{\AgdaFontStyle}[1]{\textsf{#1}}
+\newcommand{\AgdaBoundFontStyle}[1]{\textit{#1}}
+\newcommand{\AgdaFormat}[2]{#2}
+\newcommand{\AgdaNoSpaceMath}[1]
+    {\begingroup\thickmuskip=0mu\medmuskip=0mu#1\endgroup}
+\newcommand{\AgdaBound}[1]
+    {\AgdaNoSpaceMath{\textcolor{AgdaBound}{\AgdaBoundFontStyle{\AgdaFormat{#1}{#1}}}}}
+\newcommand{\AgdaDatatype}[1]
+    {\AgdaNoSpaceMath{\textcolor{AgdaDatatype}{\AgdaFontStyle{\AgdaFormat{#1}{{#1}}}}}}
+\newcommand{\AgdaInductiveConstructor}[1]
+    {\AgdaNoSpaceMath{\textcolor{AgdaInductiveConstructor}{\AgdaFontStyle{\AgdaFormat{#1}{{#1}}}}}}
 
 \newcommand\bv[1]{{\AgdaBound{$#1$}}}
 \newcommand\ty[1]{\AgdaDatatype{$#1$}}
@@ -85,7 +97,7 @@ Sean Watters
  \authorrunning{
    Kupke, Nordvall Forsberg and
    Watters}
-\titlerunning{A Fresh Look at Commutativity}
+\titlerunning{Extensional Finite Sets and Multisets in Agda}
 
 \begin{document}
 
