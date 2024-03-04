@@ -19,7 +19,7 @@
 \usepackage{amssymb}
 \usepackage{bbm}
 \usepackage{mathabx}
-\usepackage[greek,english]{babel}
+%\usepackage[greek,english]{babel}
 \usepackage{mathtools}
 
 % theorem environment
@@ -61,7 +61,7 @@
 % \usepackage{rotating}
 % \usepackage{pdflscape}
 
-\title{Extensional Finite Sets and Multisets in Agda \\ (Extended Abstract)
+\title{Extensional Finite Sets and Multisets in Agda
 \footnote{
 This work was published at APLAS 2023~\cite{freshlists}.
 All results are formalised in Agda and are available at:
@@ -73,7 +73,7 @@ Clemens Kupke
 \and
 Fredrik Nordvall Forsberg
 \and
-Sean Watters\thanks{Speaker}
+Sean Watters
 }
 
 \institute{
@@ -92,7 +92,7 @@ Sean Watters\thanks{Speaker}
 \maketitle
 
 
-\begin{abstract}
+% \begin{abstract}
 
 The type of lists is one of the most elementary inductive data types.
 It has been studied and used extensively by computer scientists and programmers for decades.
@@ -103,7 +103,7 @@ The usual approach to formalise unordered structures in mathematics
 is to represent them as functions (with finite support): finite sets as $X \to 2$, and finite multisets as $X \to \mathbb{N}$, respectively.
 However, these representations do not enjoy decidable equality, even if the underlying type $X$ does.
 
-Meanwhile the approach taken by most software libraries is to pretend --- one uses a list (or another ordered structure for efficiency) internally, but hides it and any invariants behind a layer of abstraction provided by an API.
+Meanwhile the approach taken in most programming languages is to pretend --- one uses a list (or another ordered structure for efficiency) internally, but hides it and any invariants behind a layer of abstraction provided by an API.
 However, each set or multiset can then be represented by many different lists,
 meaning that the equational theory might not be correct. This is a problem
 in a dependently typed setting, where
@@ -118,8 +118,7 @@ distinguish between different representations of the same set.
 
 In the setting of homotopy type theory (HoTT)~\cite{hottbook}, we can use higher inductive types (HITs) to define the identities on an inductive type simultaneously with its elements.
 This allows us to define a data type which enjoys both decidable equality and the right equational theory, as demonstrated by Choudhury and Fiore~\cite{choudhuryfiore2023freecommmon}.
-
-However, it may not always be possible to work in HoTT;
+However, many proof assistants today do not support HITs;
 thus, the main question we set out to answer in this work is
 whether it is possible in ordinary dependent type theory
 to define data types of finite sets and multisets, which:
@@ -128,10 +127,10 @@ to define data types of finite sets and multisets, which:
   \item satisfy the equational theories of finite sets and multisets.\label{item:success2}
 \end{enumerate}
 
-For the latter, we take as our success criteria the facts that
+For property~\eqref{item:success2}, we take as our success criteria the facts that
 the type of finite sets is the free idempotent commutative monoid~\cite{frumin2018finsetshott},
 and that finite multisets are the free commutative monoid.
-Thus, we are really aiming to find data types for the free idempotent commutative monoid and free commutative monoid, which satisfy the above property \ref{item:success1}.
+Thus, we are really aiming to find data types for the free idempotent commutative monoid and free commutative monoid, which satisfy the above property~\eqref{item:success1}.
 We accomplish this by restricting our attention to only those sets with decidable equality that can be totally ordered.
 We can then form a type of sorted lists over such a set.
 Provided we treat the existence of the ordering data carefully, this type turns out to give us exactly finite sets when the order is strict, and finite multisets when it is non-strict.
@@ -147,49 +146,54 @@ The type of fresh lists is a parameterised data type similar to the type of ordi
 with the additional requirement that in order to adjoin
 a new element $\bv{x}$ to a list $\bv{xs}$, that element $\bv{x}$ must be ``fresh'' with respect to all other elements already present in the list $\bv{xs}$.
 We follow the Agda standard library~\cite{agda-stdlib} in considering a generalised notion of freshness, given by an arbitrary binary relation on the carrier set.
+We can recover Coquand's original notion of freshness by setting the freshness relation to inequality.
 
-\begin{definition}
-    Given a type \ty{A} and a binary relation $\ty{R} : \ty{A} \to \ty{A} \to \univ$, we mutually inductively define a type $\flist{A}{R}$, together with a relation $\freshfor_R : A \to \flist{A}{R} \to \univ$, by the following constructors:
-  \begin{align*}
-    \nil &: \flist{A}{R} \\
-      \cons &: (\bv{x} : \ty{A}) \to (\bv{xs} : \flist{A}{R}) \to \bv{x}~\freshfor_R~\bv{xs} \to \flist{A}{R} \\[0.5em]
-      \nilF &: \{\bv{a} : \ty{A}\} \to \bv{a}~\freshfor_R~\nil \\
-    \consF &: \{\bv{a} : \ty{A}\} \to \{\bv{x} : \ty{A}\} \to \{\bv{xs} : \flist{A}{R}\} \to \{\bv{p} : \bv{x}~\freshfor_R~\bv{xs}\} \to \\
-    & \qquad\qquad\qquad\qquad\qquad\qquad \ty{R}~\bv{a}~\bv{x} \to \bv{a}~\freshfor_R~\bv{xs} \to \bv{a}~\freshfor_R~(\cons~\bv{x}~\bv{xs}~\bv{p}~)
-  \end{align*}
-For $a,x : A$, and  $xs : \flist{A}{R}$, we say that $a$ is fresh for $x$ when we have $R~a~x$, and that $a$ is fresh for $xs$ when we have $a~\freshfor_R~xs$.
-\end{definition}
+%\begin{definition}
+    %Given a type \ty{A} and a binary relation $\ty{R} : \ty{A} \to \ty{A} \to \univ$, we mutually inductively define a type $\flist{A}{R}$, together with a relation $\freshfor_R : A \to \flist{A}{R} \to \univ$, by the following constructors:
+  %\begin{align*}
+    %\nil &: \flist{A}{R} \\
+      %\cons &: (\bv{x} : \ty{A}) \to (\bv{xs} : \flist{A}{R}) \to \bv{x}~\freshfor_R~\bv{xs} \to \flist{A}{R} \\[0.5em]
+      %\nilF &: \{\bv{a} : \ty{A}\} \to \bv{a}~\freshfor_R~\nil \\
+    %\consF &: \{\bv{a} : \ty{A}\} \to \{\bv{x} : \ty{A}\} \to \{\bv{xs} : \flist{A}{R}\} \to \{\bv{p} : \bv{x}~\freshfor_R~\bv{xs}\} \to \\
+    %& \qquad\qquad\qquad\qquad\qquad\qquad \ty{R}~\bv{a}~\bv{x} \to \bv{a}~\freshfor_R~\bv{xs} \to \bv{a}~\freshfor_R~(\cons~\bv{x}~\bv{xs}~\bv{p}~)
+  %\end{align*}
+%For $a,x : A$, and  $xs : \flist{A}{R}$, we say that $a$ is fresh for $x$ when we have $R~a~x$, and that $a$ is fresh for $xs$ when we have $a~\freshfor_R~xs$.
+%\end{definition}
 
 
 \paragraph{Finite Sets as Sorted Lists}
-We focus our attention for this talk on the case of sorted lists without duplicates.
-We first define the type of sorted lists as an appropriate instantiation of the type of fresh lists;
-namely, \flist{A}{<} for some type $A : \setuniv$ and relation $<~:~A \to A \to \propuniv$.
-We then prove the following extensionality principle which allows us to show that \flist{A}{<} is an idempotent commutative monoid
+Our candidate representation for finite sets satisfying the above properties~\eqref{item:success1} and~\eqref{item:success2} is the type of sorted lists without duplicates.
+We obtain this by the appropriate instantiation of the type of fresh lists;
+namely, \flist{A}{<} for some type $A : \setuniv$ and a strict total order $<~:~A \to A \to \propuniv$.
+We then prove an extensionality principle analogous to set extensionality which allows us to show that \flist{A}{<} is an idempotent commutative monoid
 with the empty list \nil{} as the unit,
-and the operation $\mergesymb{}$ which merges two sorted lists as the multiplication:
+and the operation which merges two sorted lists as the multiplication:
 
-\begin{theorem}
-Given sorted lists $xs,ys : \flist{A}{<}$, we have $(a \in xs) \longleftrightarrow (a \in ys)$ for all $a : A$ iff $xs = ys$.
-\qed{}
-\end{theorem}
+%\begin{theorem}
+%Given sorted lists $xs,ys : \flist{A}{<}$, we have $(a \in xs) \longleftrightarrow (a \in ys)$ for all $a : A$ iff $xs = ys$.
+%\qed{}
+%\end{theorem}
 
-We would like to show that this is the \emph{free} idempotent commutative monoid.
+To establish~\eqref{item:success2}, we would like to show that this type is the \emph{free} idempotent commutative monoid.
 However, there is a wrinkle --- the domain of the sorted list functor cannot be $\setuniv$.
-In order to form the type of sorted lists, we require that the underlying set be equipped with a strict total order,
-since we require the data provided by the ordering to merge our sorted lists.
-Such an order cannot be freely derived for arbitrary sets; this is a strongly classical axiom called the Ordering Principle which implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
+In order to form the type of sorted lists, we require that the underlying set be equipped with a strict total order.
+% since we require the data provided by the ordering to implement the monoid multiplication.
+Assuming that any set can be equipped with such an order is a strongly classical axiom called the Ordering Principle which implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
+Therefore, we must restrict the domain of the functor to strictly totally ordered sets.
 
-Thus, we define the categories $\sto$ of strict totally ordered sets, and
+Thus, we define the categories $\sto$ of strictly totally ordered sets, and
 $\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor).
 With the categories in place, we can prove that the type of sorted lists is functorial, and left adjoint to the forgetful functor $\forgetoicm$, giving us the desired universal property.
 
 \paragraph{Other Results}
 
-The proof for sorted lists with duplicates (ie, fresh lists over a total order $\leq$) is largely the same, however we obtain a different extensionality principle.
-Since the membership relation for multisets is valued in $\setuniv$ rather than $\propuniv$, we must prove an isomorphism rather than merely a bijection.
+The proof that finite multisets are represented by sorted lists with duplicates (ie, fresh lists over a total order $\leq$) is largely the same,
+however we obtain a different extensionality principle:
+since the membership relation for multisets is valued in $\setuniv$ rather than $\propuniv$, we must prove an isomorphism rather than merely a bi-implication.
 
-Different instantiations of the freshness relation yield different free structures, whose universal properties we prove, again by free-forgetful adjunctions.
+We conclude the talk by investigating other instantiations of the freshness relation,
+finding that each yields a different free structure.
+%whose universal property we prove.
 These results are summarised informally as follows, for some carrier set $A$:
 
 \begin{center}
@@ -199,15 +203,15 @@ These results are summarised informally as follows, for some carrier set $A$:
   \hline
   $\leq$, a total order & Sorted lists & Ordered Commutative Monoid \\
   $<$, a strict total order & Sorted lists without duplicates & Ordered Idempotent Commutative Monoid \\
-  \AgdaFunction{$const_{2}$}~$\bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
-  \AgdaFunction{$const_{2}$}~$\top$ & \AgdaDatatype{List} & Monoid \\
+  $\bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
+  $\top$ & \AgdaDatatype{List} & Monoid \\
   $\neq$ & Lists without duplicates & Left-Regular Band Monoid \\
   $=$ & $1 + (A \times \mathbb{N}^{>0})$ & Reflexive Partial Monoid \\
   \hline
 \end{tabular}
 \end{center}
 
-\end{abstract}
+% \end{abstract}
 
 
 \bibliographystyle{plain}
