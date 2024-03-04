@@ -75,7 +75,7 @@
 
 \title{Extensional Finite Sets and Multisets in Agda
 \footnote{
-This work was published at APLAS 2023~\cite{freshlists}.
+This is an extended abstract of a paper that was published at APLAS 2023~\cite{freshlists}.
 All results are formalised in Agda and are available at:
 \url{https://www.seanwatters.uk/agda/fresh-lists/}.
 }}
@@ -223,6 +223,13 @@ as follows, for carrier set $A$.
   \hline
 \end{tabular}
 \end{center}
+
+\paragraph{Related Work}
+Appel and Leroy~\cite{appelleroy2023tries} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
+These can be used to construct finite sets with elements from the index type.
+Krebbers~\cite{krebbers2023extensionalmaps} extended this technique to form extensional finite maps over arbitrary countable sets of keys.
+% The use of tries allows for significantly improved lookup performance compared to lists, and with more work, it is conceivable that finite sets with elements from an arbitrary but fixed first-order data type could be extensionally represented this way~\cite{hinze2000tries}.
+% Our representation using sorted lists is less efficient, but on the other hand works uniformly in the element type, as long as it is equipped with a total order.
 
 % \end{abstract}
 
