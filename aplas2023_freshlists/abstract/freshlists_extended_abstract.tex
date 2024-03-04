@@ -176,7 +176,7 @@ We can recover Coquand's original notion of freshness by choosing inequality as 
 \paragraph{Finite Sets as Sorted Lists}
 Our candidate representation for finite sets satisfying the above properties~\eqref{item:success1} and~\eqref{item:success2} is the type of sorted lists without duplicates.
 We obtain this by the appropriate instantiation of the type of fresh lists;
-namely, \flist{A}{<} for some type $A : \setuniv$ and a strict total order $<~:~A \to A \to \propuniv$.
+namely, \flist{A}{<} for some type $A : \setuniv$ and a strict total order $< \  : A \to A \to \propuniv$.
 We then prove an extensionality principle analogous to set extensionality which allows us to show that \flist{A}{<} is an idempotent commutative monoid
 with the empty list \nil{} as the unit,
 and the operation which merges two sorted lists as the multiplication.
@@ -228,6 +228,7 @@ as follows, for carrier set $A$.
 Appel and Leroy~\cite{appelleroy2023tries} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
 These can be used to construct finite sets with elements from the index type.
 Krebbers~\cite{krebbers2023extensionalmaps} extended this technique to form extensional finite maps over arbitrary countable sets of keys.
+
 % The use of tries allows for significantly improved lookup performance compared to lists, and with more work, it is conceivable that finite sets with elements from an arbitrary but fixed first-order data type could be extensionally represented this way~\cite{hinze2000tries}.
 % Our representation using sorted lists is less efficient, but on the other hand works uniformly in the element type, as long as it is equipped with a total order.
 
