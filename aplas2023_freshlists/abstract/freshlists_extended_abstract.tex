@@ -216,8 +216,8 @@ as follows, for carrier set $A$.
   \hline
   $\leq$, a total order & Sorted lists & Ordered Commutative Monoid \\
   $<$, a strict total order & Sorted lists w/o duplicates & Ordered Idempotent Comm.\ Monoid \\
-  $\bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
-  $\top$ & \AgdaDatatype{List} & Monoid \\
+  $\lambda x. \lambda y. \bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
+  $\lambda x. \lambda y. \top$ & \AgdaDatatype{List} & Monoid \\
   $\neq$ & Lists without duplicates & Left-Regular Band Monoid \\
   $=$ & $1 + (A \times \mathbb{N}^{>0})$ & Reflexive Partial Monoid \\
   \hline
