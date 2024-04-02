@@ -2,14 +2,16 @@
 \usetheme{Boadilla}
 
 \usepackage{amsmath}
+\usepackage[bw]{agda}
 
-\title{A Fresh Look at Commutativity}
-\subtitle{Free Algebraic Structures via Fresh Lists}
+\title[Extenensional Fin. Sets \& Multisets in TT]{Extensional Finite Sets and Multisets in Type Theory}
+% \subtitle{Free Algebraic Structures via Fresh Lists}
 \author[S. Watters]{Clemens Kupke \and Fredrik Nordvall Forsberg \and \underline{\textbf{Sean Watters}}}
 \institute{University of Strathclyde}
-\date{28/11/2023}
+\date{05/04/2024}
 
 \begin{document}
+
 
 \begin{frame}
   \titlepage{}
@@ -17,25 +19,94 @@
 
 
 \begin{frame}{Motivation: A Normal Form for Contexts}
--- syntax with binding, really want commutative-by-construction
+%  data Tm (\Gamma : List Var) : Set where
+%    var : (x : Var) \to x \in \Gamma \to Tm \Gamma
+%    abs : (x : Var) \to Tm (cons x \Gamms)\to Tm \Gamma
+%
+% situation - hole : Tm (x :: y :: []), \phi : Tm (y :: x :: [])
+% doesn't fit! in lambda calculus that's expected and good; but in
+% mu calculus we really want it to.
+%
+% Need commutative-by-construction
 \end{frame}
 
-\begin{frame}{Contributions}
+
+\begin{frame}{Review: Sets, Subsets and Multisets in Type Theory}
+\begin{block}{In Short}
+\begin{itemize}
+\item Sets are (a certain class of) \emph{types}, and
+\item Given some $S : \mathsf{Set}$, subsets of $S$ are unary predicates $S \to \mathsf{Prop}$.
+\item \emph{Decidable} subsets are functions $S \to 2$
+\item Multisets over $S$ are functions $S \to \mathbb{N}$
+\end{itemize}
+\end{block}
+
+\begin{block}{How to enforce finiteness?}
+\begin{itemize}
+\item Bijection with $\AgdaDatatype{Fin}~n$, for some $n : \mathbb{N}$?
+\item An enumeration \AgdaDatatype{List}?
+\item The \emph{mere existence} (propositional trucation) of such an enumeration?
+\item A higher-inductive type (in HoTT)?
+\end{itemize}
+\end{block}
+
+\begin{center}
+Our approach: an enumeration \emph{sorted} list.
+\end{center}
 \end{frame}
+
 
 \begin{frame}{Fresh Lists}
 -- fresh lists from Catarina, Agda stdlib
 \end{frame}
 
--- Overview: where different choices for freshness get us
 
+\begin{frame}{Sorted Lists}
 -- Towards finite sets as sorted lists:
 -- definition, union
--- idempotent commutative monoid
--- the free one
--- weird cats
+\end{frame}
 
-\begin{frame}{Wrap Up}
+
+\begin{frame}{Extensionality Principle}
+\end{frame}
+
+
+\begin{frame}{Some Weird Cats}
+\end{frame}
+
+
+\begin{frame}{A Free-Forgetful Adjunction}
+\end{frame}
+
+
+\begin{frame}{Multisets for Almost-Free}
+\end{frame}
+
+
+\begin{frame}{Other Results}
+\begin{center}
+\begin{tabular}{  |c|m{7em}|m{12em}| }
+  \hline
+  Freshness Relation & \centering{Data Structure} & \centering{Free Algebraic Structure} \tabularnewline
+  \hline
+  $\leq$, a total order & Sorted lists & Ordered Comm. Monoid \\
+  $<$, a strict total order & Sorted lists w/o duplicates & Ordered idempotent comm.\ monoid \\
+  $\lambda x. \lambda y. \bot$ & \AgdaDatatype{Maybe} & Pointed set \\
+  $\lambda x. \lambda y. \top$ & \AgdaDatatype{List} & Monoid \\
+  $\neq$ & Lists w/o duplicates & Left-regular band monoid \\
+  $=$ & $1 + (A \times \mathbb{N}^{>0})$ & Reflexive partial monoid \\
+  \hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{References}
+\begin{itemize}
+\item our paper
+\item catarina's paper
+\item vikraman's paper
+\end{itemize}
 \end{frame}
 
 
