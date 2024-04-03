@@ -2,7 +2,21 @@
 \usetheme{Boadilla}
 
 \usepackage{amsmath}
-\usepackage[bw]{agda}
+\usepackage{unicode-math}
+\usepackage{mathtools}
+\usepackage[conor]{agda}
+
+\setmathfont{XITS Math}
+\input{latex/snippets} % agda code snippets
+
+% manual agdfa typesetting
+\newcommand{\xvar}{\AgdaBound{$x$}}
+\newcommand{\yvar}{\AgdaBound{$y$}}
+\newcommand{\nil}{\AgdaField{$[]$}}
+\newcommand{\cons}{\AgdaField{$\dblcolon$}}
+\newcommand{\phitm}{\AgdaFunction{$\phi$}}
+\newcommand{\datatm}{\AgdaDatatype{Tm}}
+\newcommand{\abstm}{\AgdaField{abs}}
 
 \title[Extenensional Fin. Sets \& Multisets in TT]{Extensional Finite Sets and Multisets in Type Theory}
 % \subtitle{Free Algebraic Structures via Fresh Lists}
@@ -17,17 +31,22 @@
   \titlepage{}
 \end{frame}
 
-
 \begin{frame}{Motivation: A Normal Form for Contexts}
-%  data Tm (\Gamma : List Var) : Set where
-%    var : (x : Var) \to x \in \Gamma \to Tm \Gamma
-%    abs : (x : Var) \to Tm (cons x \Gamms)\to Tm \Gamma
-%
-% situation - hole : Tm (x :: y :: []), \phi : Tm (y :: x :: [])
-% doesn't fit! in lambda calculus that's expected and good; but in
-% mu calculus we really want it to.
-%
-% Need commutative-by-construction
+\begin{exampleblock}{A Syntax with Binding}
+\snippetdatatm{}
+\end{exampleblock}
+
+\begin{itemize}
+\item  Consider the term $\abstm~\xvar~(\abstm~\yvar~\AgdaHole{?})$.
+
+\item  Notice that the hole has type $\datatm~(\yvar~\cons~\xvar~\cons~\nil)$.
+
+\item  This means if we had some $\phitm : \datatm~(\xvar~\cons~\yvar~\cons~\nil)$, it would not fit!
+\end{itemize}
+
+\begin{block}{Goal}
+  If we need such a $\phi$ to fit in such a hole, then we need contexts that are \emph{sets}, not lists.
+\end{block}
 \end{frame}
 
 
@@ -44,14 +63,14 @@
 \begin{block}{How to enforce finiteness?}
 \begin{itemize}
 \item Bijection with $\AgdaDatatype{Fin}~n$, for some $n : \mathbb{N}$?
-\item An enumeration \AgdaDatatype{List}?
+\item An enumeration list?
 \item The \emph{mere existence} (propositional trucation) of such an enumeration?
 \item A higher-inductive type (in HoTT)?
 \end{itemize}
 \end{block}
 
 \begin{center}
-Our approach: an enumeration \emph{sorted} list.
+Our approach: an enumeration, using a \emph{sorted-by-construction} list.
 \end{center}
 \end{frame}
 
@@ -109,5 +128,19 @@ Our approach: an enumeration \emph{sorted} list.
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Scottish Programming Languages and Verification Summer School 2024}
+\begin{itemize}
+  \item What: Topics in TCS, particularly foudnations of PL \& formal verification.
+  \item Where: \textbf{University of Strathclyce, Glasgow}
+  \item When: \textbf{Monday 19 July -- Friday 2 August}.
+  \item Invited Lecturer: Lindsey Kuper, UC Santa Cruz.
+  \item Core courses on Category Theory and Type Theory by Chris Heunen and Conor McBride.
+  \item Specialised courses by Bob Atkey, Kathrin Stark, Vikraman Choudhury, Andr\'{e}s Goens, Sam Lindley, and Jules Hedges.
+\end{itemize}
+
+\begin{center}
+  https://scottish-pl-institute.github.io/splv/2024-strathclyde
+\end{center}
+\end{frame}
 
 \end{document}
