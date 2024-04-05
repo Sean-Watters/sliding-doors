@@ -3,12 +3,14 @@
 % (missing unicode chars)
 
 \usepackage{newunicodechar}
-\newunicodechar{∈}{\ensuremath{\mathnormal\in}}
+\newunicodechar{∈}{\ensuremath{\mathnormal{\in}}}
+\newunicodechar{≡}{\ensuremath{\mathnormal{\equiv}}}
 \newunicodechar{∷}{\ensuremath{\mathnormal{\dblcolon}}}
 \newunicodechar{⊤}{\ensuremath{\mathnormal{\top}}}
 \newunicodechar{₁}{\ensuremath{\mathnormal{_1}}}
 \newunicodechar{₂}{\ensuremath{\mathnormal{_2}}}
 \newunicodechar{π}{\ensuremath{\mathnormal{π}}}
+\newunicodechar{∀}{\ensuremath{\mathnormal{\forall}}}
 
 %%%%%%%%%%
 % agda preamble
@@ -22,18 +24,36 @@ record _×_ (X Y : Set) : Set where
     π₁ : X
     π₂ : Y
 
-data List (X : Set) : Set where
-  [] : List X
-  _∷_ : X → List X → List X
-
 postulate
   Var : Set
-  _∈_ : {X : Set} → X → List X → Set
 
 \end{code}
 
 %%%%%%%%%%
 % agda snippets
+
+\newcommand{\snippetdatalist}{%
+\begin{code}
+data List (X : Set) : Set where
+  [] : List X
+  _∷_ : X → List X → List X
+\end{code}}
+
+\newcommand{\snippetidentity}{%
+\begin{code}
+data _≡_ {X : Set} (a : X) : X → Set where
+  refl : a ≡ a
+\end{code}
+}
+
+\newcommand{\snippetmember}{%
+\begin{code}
+data _∈_ {X : Set} (a : X) : List X → Set where
+  here  : ∀ {x xs} → a ≡ x  → a ∈ (x ∷ xs)
+  there : ∀ {x xs} → a ∈ xs → a ∈ (x ∷ xs)
+\end{code}
+}
+
 
 \newcommand{\snippetdatatm}{%
 \begin{code}

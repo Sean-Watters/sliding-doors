@@ -1,4 +1,4 @@
-\documentclass[handout]{beamer}
+\documentclass{beamer}
 \usetheme{Boadilla}
 
 \usepackage{tikz}
@@ -33,18 +33,75 @@
   \titlepage{}
 \end{frame}
 
+
+\begin{frame}{Scottish Programming Languages and Verification Summer School 2024}
+\begin{itemize}
+  \item What: Topics in TCS, particularly foundations of PL \& formal verification.
+  \item Where: \textbf{University of Strathclyde, Glasgow}
+  \item When: \textbf{Monday 19 July -- Friday 2 August}.
+
+  \pause
+
+  \item Invited Lecturer: Lindsey Kuper, UC Santa Cruz.
+  \item Core courses on Category Theory and Type Theory by Chris Heunen and Conor McBride.
+  \item Specialised courses by Bob Atkey, Kathrin Stark, Vikraman Choudhury, Andr\'{e}s Goens, Sam Lindley, and Jules Hedges.
+\end{itemize}
+
+\begin{center}
+  \url{https://scottish-pl-institute.github.io/splv/2024-strathclyde}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Type Theory 101: Types!}
+  \begin{block}{Simple Data Types}
+  \snippetdatalist{}
+  \end{block}
+\pause
+  \begin{block}{Dependent Type Families}
+  \snippetmember{}
+  \end{block}
+  %data types, identity type, funext, UIP/K, prop universe
+\end{frame}
+
+\begin{frame}{Type Theory 101: The Identity Type}
+  \snippetidentity{}
+  \pause
+  \begin{block}{Universes}
+    \begin{itemize}
+    \item Types live in \emph{universes}. The universe of all (small) types is usually called $\AgdaDatatype{Type}$.
+    \pause
+    \item A \emph{proposition} is a type where $\forall x,y.~x \equiv y$.
+    \pause
+    \item A \emph{set} is a type whose identity type is a proposition.
+    \end{itemize}
+  \end{block}
+
+  \pause
+  \begin{block}{Function Extensionality (consistent but not provable in \emph{this} TT)}
+    For any functions $f, g : A \to B$,
+    \begin{center}
+    $f \equiv g$ iff $\forall x. f~x \equiv g~x$.
+    \end{center}
+  \end{block}
+\end{frame}
+
 \begin{frame}{Motivation: A Normal Form for Contexts}
 \begin{exampleblock}{A Syntax with Binding}
 \snippetdatatm{}
 \end{exampleblock}
+\pause
 
 \begin{itemize}
-\item  Consider the term $\abstm~\xvar~(\abstm~\yvar~\AgdaHole{?})$.
+  \item  Consider the term $\abstm~\xvar~(\abstm~\yvar~\AgdaHole{?})$.
+        \pause
 
-\item  Notice that the hole has type $\datatm~(\yvar~\cons~\xvar~\cons~\nil)$.
+  \item  Notice that the hole has type $\datatm~(\yvar~\cons~\xvar~\cons~\nil)$.
+        \pause
 
 \item  This means if we had some $\phitm : \datatm~(\xvar~\cons~\yvar~\cons~\nil)$, it would not fit!
 \end{itemize}
+\pause
 
 \begin{block}{Goal}
   If we need such a $\phi$ to fit in such a hole, then we need contexts that are \emph{sets}, not lists.
@@ -52,15 +109,19 @@
 \end{frame}
 
 
-\begin{frame}{Review: Sets, Subsets and Multisets in Type Theory}
+\begin{frame}{Sets, Subsets and Multisets in Type Theory}
 \begin{block}{In Short}
 \begin{itemize}
-\item Sets are (a certain class of) \emph{types}.
-\item Given some $S : \mathsf{Set}$, subsets of $S$ are unary predicates $S \to \mathsf{Prop}$.
-\item \emph{Decidable} subsets are functions $S \to 2$.
+  \item Sets are (a certain class of) \emph{types}.
+        \pause
+  \item Given some $S : \mathsf{Set}$, subsets of $S$ are unary predicates $S \to \mathsf{Prop}$.
+        \pause
+  \item \emph{Decidable} subsets are functions $S \to 2$.
+        \pause
 \item Multisets over $S$ are functions $S \to \mathbb{N}$.
 \end{itemize}
 \end{block}
+\pause
 
 \begin{center}
 But what about \emph{finite} sets/multisets?
@@ -72,13 +133,17 @@ But what about \emph{finite} sets/multisets?
 \begin{itemize}
   \item An enumeration list? \\
         (No extensionality.)
+        \pause
   \item Bijection with $\AgdaDatatype{Fin}~n$, for some $n : \mathbb{N}$? \\
         (No extensionality, and we only get decidable equality with function extensionality.)
+        \pause
   \item The \emph{mere existence} (propositional trucation) of such an enumeration? \\
         (No decidable equality.)
+        \pause
   \item A higher-inductive type? \\
         (Works, but restricts us to HoTT. Also, HITs can be challenging. cf. Choudhury \& Fiore, 2023.)
 \end{itemize}
+\pause
 \end{block}
 
 \begin{center}
@@ -90,11 +155,16 @@ Our approach: an enumeration, but using a \emph{sorted-by-construction} list.
 \begin{frame}{Towards Free Commutative Algebraic Structures}
 \begin{block}{Some Facts}
 \begin{itemize}
-\item The free monoid over a set is given by the list functor, $\AgdaDatatype{List} : \AgdaDatatype{Set} \to \AgdaDatatype{Mon}$.
-\item The free commutative monoid over a set is given by the finite multiset (AKA ``bag'') functor, $\AgdaDatatype{Bag} : \AgdaDatatype{Set} \to \AgdaDatatype{CMon}$.
-\item The free idempotent commutative monoid over a set is given by the finite powerset functor, $\AgdaDatatype{\ensuremath{\mathcal{P}_{f}}} : \AgdaDatatype{Set} \to \AgdaDatatype{ICMon}$.
+  \item The free monoid over a set is given by the list functor, $\AgdaDatatype{List} : \AgdaDatatype{Set} \to \AgdaDatatype{Mon}$.
+        \pause
+  \item The free commutative monoid over a set is given by the finite multiset (AKA ``bag'')
+        functor, $\AgdaDatatype{Bag} : \AgdaDatatype{Set} \to \AgdaDatatype{CMon}$.
+        \pause
+  \item The free idempotent commutative monoid over a set is given by the finite powerset
+        functor, $\AgdaDatatype{\ensuremath{\mathcal{P}_{f}}} : \AgdaDatatype{Set} \to \AgdaDatatype{ICMon}$.
 \end{itemize}
 \end{block}
+\pause
 
 \begin{center}
 This gives us a way to evaluate the correctness of our proposed solutions for sets and multisets; they should satisfy the above universal properties.
@@ -122,6 +192,7 @@ This gives us a way to evaluate the correctness of our proposed solutions for se
 
   The key definition is $\union : \AgdaDatatype{FList}(X,<) \to \AgdaDatatype{FList}(X,<) \to \AgdaDatatype{FList}(X,<)$, which merges two lists:
 
+  \pause
   \begin{block}{Defintion: Merge for Sorted Lists}
     Redacted! (this definition is exactly what you'd expect, but with the added noise of the proof data)
   \end{block}
@@ -137,6 +208,7 @@ This gives us a way to evaluate the correctness of our proposed solutions for se
 \begin{center}
   Except\ldots{}
 \end{center}
+\pause
 
 \begin{block}{The Extensionality Principle for Sorted Lists}
   For all $xs, ys : \AgdaDatatype{FList}(X,<)$:
@@ -145,6 +217,8 @@ This gives us a way to evaluate the correctness of our proposed solutions for se
     $xs = ys$ iff $(a \in xs) \iff (a \in ys)$ for all $a : X$.
   \end{center}
 \end{block}
+
+This follows by appeal to decidability.
 \end{frame}
 
 
@@ -154,15 +228,46 @@ This gives us a way to evaluate the correctness of our proposed solutions for se
   \item This needs to be preserved by round trips.
   \item So the objects of \emph{both} categories (i.e. the sets and the monoids) need to carry it.
 \end{itemize}
+\pause
 
-\begin{block}{Universal Property of Idempotent Commutative Monoids}
-   $\AgdaDatatype{SList} : \AgdaDatatype{STO} \to \AgdaDatatype{OICMon}$ forms a functor which is left adjoint to the forgetful functor $\AgdaDatatype{\ensuremath{\mathcal{u}}} : \AgdaDatatype{OICMon} \to \AgdaDatatype{STO}$.
+\begin{block}{The Category \AgdaDatatype{STO}}
+\begin{itemize}
+  \item Objects: Sets, equipped with strict total orders.
+  \item Morphisms: \emph{Not-necessarily monotone} functions on the underlying sets.
+\end{itemize}
 \end{block}
 
-\begin{block}{Ignorance is Classically Valid, but Constructive Taboo}
-  If only there was a ``free strict total order on a set'', then we could ignore the ordering data and obtain the genuine $\mathcal{P}_{f}$.
-  But such a thing is a weak form of AC, and implies LEM.
+\begin{block}{The Category \AgdaDatatype{OICMon}}
+\begin{itemize}
+  \item Objects: Idempotent commutative monoids, equipped with strict total orders.
+  \item Morphisms: Morphisms of idem. comm. monoids. i.e., functions on the underlying sets that preserve multiplication and identity, but \emph{not necessarily the ordering}.
+\end{itemize}
 \end{block}
+\end{frame}
+
+\begin{frame}{A Free-Forgetful Adjunction}
+\begin{block}{The Universal Property}
+   $\AgdaDatatype{SList} : \AgdaDatatype{STO} \to \AgdaDatatype{OICMon}$ forms a functor which is left adjoint to the forgetful functor $\AgdaDatatype{\ensuremath{\mathcal{u}}} : \AgdaDatatype{OICMon} \to \AgdaDatatype{STO}$ defined by $\AgdaDatatype{\ensuremath{\mathcal{u}}}(X,<,\cdot,\epsilon) \coloneq (X,<)$.
+ \end{block}
+ \pause
+We prove the adjunction via natural bijection of homsets. That is, we must show:
+
+\begin{center}
+  $\mathsf{Hom}_{OICMon}(\AgdaDatatype{FList}(A),~B) \cong \mathsf{Hom}_{STO}(A,~ \AgdaDatatype{\ensuremath{\mathcal{u}}}(B))$
+\end{center}
+\pause
+
+The hard direction involves showing that
+\begin{center}
+$\lambda~(f : \AgdaField{Carrier}~A \to \AgdaField{Carrier}~B)~\to~(\AgdaFunction{foldr}~(\lambda~a~b~\to~(f~a) \cdot b)~\epsilon)$
+\end{center}
+is a morphism of \AgdaDatatype(OICMon).
+
+
+%\begin{block}{Ignorance is Classically Valid, but Constructive Taboo}
+%  If only there was a ``free strict total order on a set'', then we could ignore the ordering data and obtain the genuine $\mathcal{P}_{f}$.
+%  But such a thing is a weak form of AC, and implies LEM.
+%\end{block}
 \end{frame}
 
 \begin{frame}{Multisets\ldots{}}
@@ -217,21 +322,6 @@ This gives us a way to evaluate the correctness of our proposed solutions for se
   \item Choudhury, V., Fiore, M.: \emph{Free commutative monoids in Homotopy Type Theory}. In: MFPS '22. \\
         \url{https://doi.org/10.46298/entics.10492}
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Scottish Programming Languages and Verification Summer School 2024}
-\begin{itemize}
-  \item What: Topics in TCS, particularly foudnations of PL \& formal verification.
-  \item Where: \textbf{University of Strathclyde, Glasgow}
-  \item When: \textbf{Monday 19 July -- Friday 2 August}.
-  \item Invited Lecturer: Lindsey Kuper, UC Santa Cruz.
-  \item Core courses on Category Theory and Type Theory by Chris Heunen and Conor McBride.
-  \item Specialised courses by Bob Atkey, Kathrin Stark, Vikraman Choudhury, Andr\'{e}s Goens, Sam Lindley, and Jules Hedges.
-\end{itemize}
-
-\begin{center}
-  \url{https://scottish-pl-institute.github.io/splv/2024-strathclyde}
-\end{center}
 \end{frame}
 
 \end{document}
