@@ -38,7 +38,7 @@
 \begin{itemize}
   \item What: Topics in TCS, particularly foundations of PL \& formal verification.
   \item Where: \textbf{University of Strathclyde, Glasgow}
-  \item When: \textbf{Monday 19 July -- Friday 2 August}.
+  \item When: \textbf{Monday 29 July -- Friday 2 August}.
 
   \pause
 
@@ -245,6 +245,22 @@ This follows by appeal to decidability.
 \end{block}
 \end{frame}
 
+\begin{frame}{Why No Monotonicity?}
+
+Two reasons:
+\begin{itemize}
+\item We don't \emph{want} it --- we'd rather map arbitrary functions and have the output be sorted.
+\item It breaks the adjunction (I think).
+\end{itemize}
+
+\pause
+
+\begin{block}{Ignorance is Classically Valid, but Constructive Taboo}
+ If only there was a ``free strict total order on a set'', then we could ignore the ordering data and obtain the genuine $\mathcal{P}_{f}$.
+ But such a thing is a weak form of AC, and implies LEM.
+\end{block}
+\end{frame}
+
 \begin{frame}{A Free-Forgetful Adjunction}
 \begin{block}{The Universal Property}
    $\AgdaDatatype{SList} : \AgdaDatatype{STO} \to \AgdaDatatype{OICMon}$ forms a functor which is left adjoint to the forgetful functor $\AgdaDatatype{\ensuremath{\mathcal{u}}} : \AgdaDatatype{OICMon} \to \AgdaDatatype{STO}$ defined by $\AgdaDatatype{\ensuremath{\mathcal{u}}}(X,<,\cdot,\epsilon) \coloneq (X,<)$.
@@ -264,10 +280,6 @@ $\lambda~(f : \AgdaField{Carrier}~A \to \AgdaField{Carrier}~B)~\to~(\AgdaFunctio
 is a morphism of \AgdaDatatype(OICMon).
 
 
-%\begin{block}{Ignorance is Classically Valid, but Constructive Taboo}
-%  If only there was a ``free strict total order on a set'', then we could ignore the ordering data and obtain the genuine $\mathcal{P}_{f}$.
-%  But such a thing is a weak form of AC, and implies LEM.
-%\end{block}
 \end{frame}
 
 \begin{frame}{Multisets\ldots{}}
