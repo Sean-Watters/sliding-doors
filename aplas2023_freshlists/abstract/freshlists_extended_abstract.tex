@@ -149,7 +149,7 @@ Provided we treat the existence of the ordering data carefully, this type turns 
 
 We show that our constructions satisfy universal properties, in the sense that they are left adjoints to forgetful functors --- this is the standard way to state freeness in the language of category theory.
 However, note that the notion of freeness is with respect to e.g.\ totally ordered monoids, rather than all monoids.
-
+%
 For proving the universal properties and for defining the categories involved, we need function extensionality.
 However we stress that the constructions themselves work in ordinary dependent type theory, without function extensionality.
 
@@ -179,7 +179,7 @@ Our candidate representation for finite sets satisfying the above properties~\eq
 We obtain this by the appropriate instantiation of the type of fresh lists;
 namely, \flist{A}{<} for some type $A : \setuniv$ and a strict total order $< \  : A \to A \to \propuniv$.
 We then prove an extensionality principle analogous to set extensionality which allows us to show that \flist{A}{<} is an idempotent commutative monoid
-with the empty list \nil{} as the unit,
+with the empty list as the unit,
 and the operation which merges two sorted lists as the multiplication.
 
 %\begin{theorem}
@@ -194,10 +194,10 @@ Assuming that any set can be equipped with such an order is a strongly classical
 Therefore, we must restrict the domain of the functor to strictly totally ordered sets.
 %
 Thus, we define the categories $\sto$ of strictly totally ordered sets, and
-$\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor; this is satsfied for \flist{A}{<} via the lexicographic ordering).
+$\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor; this is satisfied for \flist{A}{<} via the lexicographic ordering).
 With the categories in place, we can prove that the type of sorted lists is functorial, and left adjoint to the forgetful functor $\forgetoicm$, giving us the desired universal property.
 
-\paragraph{Other Results}
+\paragraph{Other Free Algebraic Structures}
 
 The choice to implement sorted lists as an instantiation of the type of fresh lists reveals further paths to explore;
 what happens for other instantiations of the freshness relation?
@@ -207,23 +207,25 @@ In particular, it should come as no surprise that finite multisets are represent
 The proof of the adjunction is very similar to the previous case,
 however we obtain a different extensionality principle:
 since the membership relation for multisets is valued in $\setuniv$ rather than $\propuniv$, we must prove an isomorphism rather than merely a bi-implication.
+%
+Other such results are summarised in Table~\ref{tab:other-results}.
 
-These results are summarised as follows, for carrier set $A$.
-
-\begin{center}
-\begin{tabular}{  |c|m{12em}|m{16em}| }
-  \hline
-  Freshness Relation & \centering{Data Structure} & \centering{Free Algebraic Structure} \tabularnewline
-  \hline
-  $\leq$, a total order & Sorted lists & Ordered Commutative Monoid \\
-  $<$, a strict total order & Sorted lists w/o duplicates & Ordered Idempotent Comm.\ Monoid \\
-  $\lambda x. \lambda y. \bot$ & \AgdaDatatype{Maybe} & Pointed Set \\
-  $\lambda x. \lambda y. \top$ & \AgdaDatatype{List} & Monoid \\
-  $\neq$ & Lists without duplicates & Left-Regular Band Monoid \\
-  $=$ & $1 + (A \times \mathbb{N}^{>0})$ & Reflexive Partial Monoid \\
-  \hline
-\end{tabular}
-\end{center}
+\begin{table}[bh]\centering
+  \begin{tabular}{  |c|m{16em}|m{12em}| }
+    \hline
+    Freshness Relation & \centering{Free Algebraic Structure} & \centering{Data Structure} \tabularnewline
+                                                                \hline
+                                                                $\leq$, a total order & Ordered Commutative Monoid & Sorted lists \\
+    $<$, a strict total order & Ordered Idempotent Comm.\ Monoid & Sorted lists w/o duplicates \\
+    $\lambda x. \lambda y. \bot$ & Pointed Set & \AgdaDatatype{Maybe} \\
+    $\lambda x. \lambda y. \top$ & Monoid & \AgdaDatatype{List} \\
+    $\neq$ & Left-Regular Band Monoid & Lists without duplicates \\
+    $=$ & Reflexive Partial Monoid & $1 + (A \times \mathbb{N}^{>0})$ \\
+    \hline
+  \end{tabular}
+  \caption{Free algebraic structures as instantiations of freshlists (carrier set $A$)}
+  \label{tab:other-results}
+\end{table}
 
 \paragraph{Related Work}
 Appel and Leroy~\cite{appelleroy2023tries} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
