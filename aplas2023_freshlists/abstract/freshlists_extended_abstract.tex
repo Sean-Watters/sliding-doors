@@ -149,8 +149,9 @@ Provided we treat the existence of the ordering data carefully, this type turns 
 
 We show that our constructions satisfy universal properties, in the sense that they are left adjoints to forgetful functors --- this is the standard way to state freeness in the language of category theory.
 However, note that the notion of freeness is with respect to e.g.\ totally ordered monoids, rather than all monoids.
+
 For proving the universal properties and for defining the categories involved, we need function extensionality.
-Nevertheless the constructions themselves work in ordinary dependent type theory.
+However we stress that the constructions themselves work in ordinary dependent type theory, without function extensionality.
 
 \paragraph{Fresh Lists}
 Fresh lists, the key inductive data type of this work, were first introduced by C.~Coquand to represent contexts in the simply typed lambda calculus~\cite{ccoquand2002formalstlc}.
@@ -189,25 +190,25 @@ and the operation which merges two sorted lists as the multiplication.
 To establish~\eqref{item:success2}, we would like to show that this type is the \emph{free} idempotent commutative monoid.
 However, there is a wrinkle --- the domain of the sorted list functor cannot be simply the category of sets $\setuniv$, since we require that the underlying set is equipped with a strict total order in order to form the type of sorted lists.
 % since we require the data provided by the ordering to implement the monoid multiplication.
-Assuming that any set can be equipped with such an order is a strongly classical axiom called the Ordering Principle which implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
+Assuming that any set can be equipped with such an order is a strongly classical axiom called the Ordering Principle which is strictly weaker than the well-ordering principle, but still implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
 Therefore, we must restrict the domain of the functor to strictly totally ordered sets.
 %
 Thus, we define the categories $\sto$ of strictly totally ordered sets, and
-$\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor).
+$\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor; this is satsfied for \flist{A}{<} via the lexicographic ordering).
 With the categories in place, we can prove that the type of sorted lists is functorial, and left adjoint to the forgetful functor $\forgetoicm$, giving us the desired universal property.
 
 \paragraph{Other Results}
 
-The proof that finite multisets are represented by sorted lists with duplicates (i.e., fresh lists over a total order $\leq$) is largely the same,
+The choice to implement sorted lists as an instantiation of the type of fresh lists reveals further paths to explore;
+what happens for other instantiations of the freshness relation?
+It turns out that different choices each yield a different free structure.
+
+In particular, it should come as no surprise that finite multisets are represented by sorted lists with duplicates (i.e., fresh lists over a total order $\leq$).
+The proof of the adjunction is very similar to the previous case,
 however we obtain a different extensionality principle:
 since the membership relation for multisets is valued in $\setuniv$ rather than $\propuniv$, we must prove an isomorphism rather than merely a bi-implication.
 
-We conclude %the talk
-by investigating other instantiations of the freshness relation,
-finding that each yields a different free structure.
-%whose universal property we prove.
-These results are summarised %informally
-as follows, for carrier set $A$.
+These results are summarised as follows, for carrier set $A$.
 
 \begin{center}
 \begin{tabular}{  |c|m{12em}|m{16em}| }
