@@ -147,6 +147,7 @@ We accomplish this by restricting our attention to only those sets with decidabl
 We can then form a type of sorted lists over such a set.
 Provided we treat the existence of the ordering data carefully, this type turns out to give us exactly finite sets when the order is strict, and finite multisets when it is non-strict.
 
+
 We show that our constructions satisfy universal properties, in the sense that they are left adjoints to forgetful functors --- this is the standard way to state freeness in the language of category theory.
 However, note that the notion of freeness is with respect to e.g.\ totally ordered monoids, rather than all monoids.
 %
@@ -190,8 +191,8 @@ and the operation which merges two sorted lists as the multiplication.
 To establish~\eqref{item:success2}, we would like to show that this type is the \emph{free} idempotent commutative monoid.
 However, there is a wrinkle --- the domain of the sorted list functor cannot be simply the category of sets $\setuniv$, since we require that the underlying set is equipped with a strict total order in order to form the type of sorted lists.
 % since we require the data provided by the ordering to implement the monoid multiplication.
-Assuming that any set can be equipped with such an order is a strongly classical axiom called the Ordering Principle which is strictly weaker than the well-ordering principle, but still implies LEM~\cite{swanOPLEM} and is not provable in ZF~\cite{jech1973choice}.
-Therefore, we must restrict the domain of the functor to strictly totally ordered sets.
+Assuming that any set can be equipped with such an order is a strongly classical axiom called the Ordering Principle which is strictly weaker than the well-ordering principle~\cite[Ch. 5 \S 5]{jech1973choice}, but still implies LEM~\cite{swanOPLEM}.
+Therefore to remain constructive, we must restrict the domain of the functor to strictly totally ordered sets.
 %
 Thus, we define the categories $\sto$ of strictly totally ordered sets, and
 $\oicm$ of \emph{ordered} idempotent commutative monoids (ordering data is also required for the monoids so that it can be preserved by the forgetful functor; this is satisfied for \flist{A}{<} via the lexicographic ordering).
@@ -231,6 +232,9 @@ Other such results are summarised in Table~\ref{tab:other-results}.
 Appel and Leroy~\cite{appelleroy2023tries} recently introduced canonical binary tries as an extensional representation of finite \emph{maps}.
 These can be used to construct finite sets with elements from the index type.
 Krebbers~\cite{krebbers2023extensionalmaps} extended this technique to form extensional finite maps over arbitrary countable sets of keys.
+
+The technique of using underlying ordering data to construct extensional data structures is not new, and has been employed in the \texttt{extructures}~\cite{extructures} Coq library since at least 2015.
+
 
 % The use of tries allows for significantly improved lookup performance compared to lists, and with more work, it is conceivable that finite sets with elements from an arbitrary but fixed first-order data type could be extensionally represented this way~\cite{hinze2000tries}.
 % Our representation using sorted lists is less efficient, but on the other hand works uniformly in the element type, as long as it is equipped with a total order.
