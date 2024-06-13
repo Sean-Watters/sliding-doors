@@ -1,6 +1,6 @@
-\documentclass{beamer}
+\documentclass[aspectratio=169]{beamer}
 \usetheme{Boadilla}
-
+\setbeamertemplate{navigation symbols}{}
 \usepackage{tikz}
 \usepackage{amsmath}
 \usepackage{unicode-math}
@@ -37,17 +37,23 @@
 
   We want a data type for collections of unordered data (ie, finite sets and multisets), which:
   \begin{itemize}
+          \smallskip
     \item Has decidable equality iff the underlying type does.
+          \smallskip
     \item Satisfies the expected equational theories.
+          \smallskip
+    \item Works in ``standard'' MLTT.
   \end{itemize}
 
-  \begin{block}{Our Contribution}
-  \begin{itemize}
-    \item We show that a suitable generalisation of Catarina Coquand's data type of fresh lists acheives the above, and also realises many other free algebraic structures.
+  %\begin{block}{Our Contribution}
+  %\begin{itemize}
+  %  \item We show that a suitable generalisation of Catarina Coquand's data type of fresh lists acheives the above, and also realises many other data structures via different instantiations.
 
-    \item In each case, we find a free-forgetful adjunction.
-  \end{itemize}
-  \end{block}
+  %  \item We prove that each instantiation satisfies the universal property of some free algebraic structure.
+
+  %  \item In particular: the free pointed set, free monoid, free left-regular band monoid, and free reflexive partial monoid.
+  %\end{itemize}
+  %\end{block}
 
 \end{frame}
 
@@ -75,30 +81,45 @@
 
 
 \begin{frame}{Notions of Subsets and Multisets in Type Theory}
-\begin{block}{In Short}
+% \begin{block}{In Short}
+In short:
 \begin{itemize}
+          \smallskip
   \item Given some $S : \mathsf{Set}$, subsets of $S$ are unary predicates $S \to \mathsf{Prop}$.
+          \smallskip
   \item \emph{Decidable} subsets are functions $S \to 2$.
+          \smallskip
   \item Multisets over $S$ are functions $S \to \mathbb{N}$.
+          \smallskip
 \end{itemize}
-\end{block}
-\pause
+% \end{block}
+\bigskip
 
-\begin{block}{Desirable Properties}
+\pause{}
+
+% \begin{block}{Desirable Properties}
+Desirable properties:
 \begin{itemize}
+          \smallskip
   \item Extenensionality: \pause $(X = Y) \iff (\forall x.~x \in X \iff x \in Y)$
-  \item Decidable Equality \pause $\Leftarrow$ Finiteness
+        \pause
+          \smallskip
+  \item Decidable Equality\pause{}, which we would expect to follow from finiteness.
+          \smallskip
 \end{itemize}
-\end{block}
+% \end{block}
 \end{frame}
 
 \begin{frame}{Finiteness, Decidable Equality, Extensionality}
-\begin{block}{Some Attempts at Respresenting Finite Sets}
+  What approaches are available for finite subsets?
 \begin{itemize}
+          \smallskip
   \item  $S \to 2$? \\
-        (No way to enforce finiteness; no dec. eq.)
+        (No decidable equality.)
+  \smallskip
   \item An enumeration list? \\
         (No extensionality.)
+  \smallskip
         % \pause
   % \item Bijection with $\AgdaDatatype{Fin}~n$, for some $n : \mathbb{N}$? \\
         % (No extensionality, and we only get decidable equality with function extensionality.)
@@ -106,31 +127,41 @@
   % \item The \emph{mere existence} (propositional trucation) of one of the above? \\
         % (No decidable equality.)
         % \pause
-  \item A higher-inductive type? \\
-        (Works, but restricts us to HoTT. Also, HITs can be challenging. cf. Choudhury \& Fiore, 2023.)
+  \item A higher-inductive type? (Choudhury \& Fiore, 2023; Joram \& Veltri, 2023)\\
+        (Works, but restricts us to HoTT.)
+  \smallskip
+  \item A sorted list? \\
+        (Our approach; need to treat the ordering data with care. See also: Appel \& Leroy, 2023; Krebbers, 2023; the Rocq libraries $\mathtt{fset}$, $\mathtt{extructures}$, $\mathtt{finmap}$, $\mathtt{ssrmisc}$. )
 \end{itemize}
-
-\end{block}
-
-  % Notice: A constructive witness of finite support for some dec. subset that preserves extensionality $S \to 2$ is exactly the type we were trying to define in the first place.
-
-\begin{center}
-Our approach: an enumeration, but using a \emph{sorted-by-construction} list.
-\end{center}
 \end{frame}
 
 
 \begin{frame}{The Equational Theory of Finite Sets}
-We ought to have:
+
+  We expect notions of union and empty set, satisfying:
 \begin{itemize}
-\item $\cup$, a binary operation which is: associative, commutative, idempotent, and unital (with $\emptyset$).
-\item $\cap$, a binary operation which is: associative, commutative, idempotent, and distributes with $\cup$.
-\item $\subseteq$, a binary relation which forms a lattice with $\cup$ and $\cap$.
+  \item $X \cup \emptyset = \emptyset \cup X = X$ (unit).
+  \item $X \cup X = X$ (idempotency).
+        \smallskip
+  \item $X \cup Y = Y \cup X$ (commutativity).
+        \smallskip
+  \item $X \cup (Y \cup Z) = (X \cup Y) \cup Z$ (associativity).
 \end{itemize}
 
-\begin{block}{Theorem (In Set Theory) (Folklore?)}
-  The free idempotent commutative monoid over a set $X$ is given by its finite powerset, $\mathcal{P}_{f}(X)$.
+
+% \item $\cup$, a binary operation which is: associative, commutative, idempotent, and unital (with $\emptyset$).
+% \item $\cap$, a binary operation which is: associative, commutative, idempotent, and distributes with $\cup$ (both ways).
+% \item $\subseteq$, a binary relation which forms a lattice with $\cup$ and $\cap$.
+\bigskip
+
+\begin{block}{Theorem (Folklore?)}
+  In the context of set theory, the finite powerset $\mathcal{P}_{f}(X)$, is the free idempotent commutative monoid over the set $X$.
 \end{block}
+
+\bigskip
+
+We show that the free idem. comm. monoid is realised in type theory by sorted lists.
+
 
 %\pause
 %\begin{center}
@@ -140,6 +171,9 @@ We ought to have:
 
 
 \begin{frame}{Fresh Lists}
+
+  We study sorted lists as an instance of the following generalisation:
+
   \snippetdatafreshlist{}
 
   Originally due to Catarina Coquand.
@@ -149,28 +183,34 @@ We ought to have:
 
 \begin{frame}{Sorted Lists}
 
-\begin{itemize}
-  \item To instantiate fresh lists as sorted lists, we set the relation to some irreflexive total order, $<$.
 
-  \item The ordering ensures that any two lists with the same members are equal (extensionality!).
+  \bigskip
+
+  Sorted lists (without duplicates) arise as fresh lists over an irreflexive total order $<$:
+\begin{itemize}
+        \smallskip
+  \item The ordering ensures that any two lists with the same elements are equal.
+        \smallskip
 
   \item Irreflexivity forces any given element to appear exactly once in any given list.
 \end{itemize}
 
-\begin{block}{``Definition'': Union (AKA Merge Sort)}
-\begin{itemize}
-\item $X \cup \emptyset = \emptyset \cup X = X$
-  \item If both sides are non-empty, then compare the heads.
-  \item Take the smaller to be the new head, and make a recursive call on the remainder for the tail. (If equal, drop one.)
-  \item \ldots{}and discharge all the proof obligations in each case\ldots{}
-\end{itemize}
+\bigskip
+
+\begin{block}{Monoid Structure}
+  \begin{itemize}
+          \item Unit: The empty list.
+    \item Multiplication: Merge sort (defined by recursion on the lists, using totality of $<$).
+        \smallskip
+  \end{itemize}
 \end{block}
 \end{frame}
 
 
 \begin{frame}{Extensionality Principle}
-% We need to show that \union~satisfies the idem. comm. monoid laws.
-% I redacted the definition of \union, so imagine how awful these proofs must be!
+  Proving that the laws of $\emptyset$ and $\union$ hold for sorted lists by induction is messy. Instead:
+
+  \bigskip
 
 \begin{block}{Theorem: The Extensionality Principle for Sorted Lists}
   For all $xs, ys : \AgdaDatatype{FList}(X,<)$:
@@ -180,14 +220,25 @@ We ought to have:
   \end{center}
 \end{block}
 
-This follows by appeal to decidability.
+\bigskip
+
+With this sledgehammer, the proofs of the equations for $\cup$ become much easier.
+
+\bigskip
+
+\begin{block}{Theorem}
+  $(\AgdaDatatype{FList}(X,<),~\cup,~\mathsf{nil})$ is an idempotent commutative monoid.
+\end{block}
+
 \end{frame}
 
 
-\begin{frame}{The Categories at Issue}
-\begin{center}
-  We need ordering data to form the type $\AgdaDatatype{FList}(X,<)$.
-\end{center}
+\begin{frame}{Freeness}
+  Freeness is formulated as a universal property; sorted lists form a functor which is left adjoint to a forgetful functor.
+  But what are the categories?
+
+  \bigskip
+  \pause
 
 \begin{block}{The Category \AgdaDatatype{STO}}
 \begin{itemize}
@@ -202,72 +253,70 @@ This follows by appeal to decidability.
   \item Morphisms: \emph{Not necessarily monotone} monoid morphisms.
 \end{itemize}
 \end{block}
-\end{frame}
 
+\bigskip
+\pause
 
-\begin{frame}{A Free-Forgetful Adjunction}
+  % We need ordering data to form the type $\AgdaDatatype{FList}(X,<)$, but this implementation detail should not restrict the morphisms.
 \begin{block}{Theorem: The Universal Property of Ordered Idem. Comm. Monoids}
    $\AgdaDatatype{SList} : \AgdaDatatype{STO} \to \AgdaDatatype{OICMon}$ forms a functor which is left adjoint to the forgetful functor $\AgdaDatatype{\ensuremath{\mathcal{u}}} : \AgdaDatatype{OICMon} \to \AgdaDatatype{STO}$ defined by $\AgdaDatatype{\ensuremath{\mathcal{u}}}(X,<,\cdot,\epsilon) \coloneq (X,<)$.
  \end{block}
-%We prove the adjunction via natural bijection of homsets. That is, we must show:
-%
-%\begin{center}
-  %$\mathsf{Hom}_{OICMon}(\AgdaDatatype{FList}(A),~B) \cong \mathsf{Hom}_{STO}(A,~ \AgdaDatatype{\ensuremath{\mathcal{u}}}(B))$
-%\end{center}
-%\pause
-%
-%The hard direction involves showing that
-%\begin{center}
-%$\lambda~(f : \AgdaField{Carrier}~A \to \AgdaField{Carrier}~B)~\to~(\AgdaFunction{foldr}~(\lambda~a~b~\to~(f~a) \cdot b)~\epsilon)$
-%\end{center}
-%is a morphism of \AgdaDatatype{OICMon}.
 \end{frame}
+
+
 
 \begin{frame}{Multisets}
 
-\begin{itemize}
-  \item Setting the freshness relation to be some decidable (reflexive) total order $\leq$ yields sorted lists that allow duplicate elements.
-  These realise finite multisets.
-  \item $\in$ is valued in prop-valued for finite sets, but set-valued for finite multisets. So we need a different extensionality principle:
-\end{itemize}
+  Fresh lists over a decidable reflexive total order $\leq$ realise finite multisets.
+
+  \bigskip
+
+  $\in$ is prop-valued for finite sets, but set-valued for finite multisets. So we need a different extensionality principle:
 
   \begin{block}{Theorem: Extensionality Principle for $\AgdaDatatype{FList}(X, \leq)$}
-    For all $a : X$, and $xs, ys : \AgdaDatatype{FList}(X, \leq)$:
-  \begin{itemize}
-    \item Each $\AgdaDatatype{FList}(X, \leq)$ induces a ``multiplicity function'', $\AgdaFunction{count} : \AgdaDatatype{FList}(X,\leq) \to X \to \mathbb{N}$, such that \\
-          $\AgdaFunction{count}~xs~a~=~\AgdaFunction{count}~ys~a$ iff $(a \in xs) \cong (a \in ys) $.
-    \item $(a \in xs) \cong (a \in ys)$ iff $xs = ys$.
-  \end{itemize}
- \end{block}
-\end{frame}
+    There is a ``multiplicity function'', $\AgdaFunction{count} : \AgdaDatatype{FList}(X,\leq) \to X \to \mathbb{N}$,
+    such that:
 
-\begin{frame}{Multisets}
+    \smallskip
+
+    For all $a : X$, and $xs, ys : \AgdaDatatype{FList}(X, \leq)$,
+
+    \[
+      \AgdaFunction{count}~xs~a~=~\AgdaFunction{count}~ys~a \quad\Leftrightarrow\quad (a \in xs) \cong (a \in ys) \quad\Leftrightarrow\quad xs = ys.
+    \]
+ \end{block}
+
+ \bigskip
+ \pause
+
+ Analagous to before:
 
  \begin{block}{Theorem: Universal Property of Ordered Commutative Monoids}
    $\AgdaDatatype{SListD} : \AgdaDatatype{DTO} \to \AgdaDatatype{OCMon}$ forms a functor which is left adjoint to the forgetful functor $\AgdaDatatype{\ensuremath{\mathcal{u}}} : \AgdaDatatype{OCMon} \to \AgdaDatatype{DTO}$.
  \end{block}
 
- Where DTO and OCMon are analogous to STO and OICMon from before, but without irreflexivity or idempotency.
 
 \end{frame}
 
 
 \begin{frame}{More Free Algebraic Structures}
-  Different notions of ``freshness'' yield different free algebraic structures.
+  Different notions of ``freshness'' yield different free algebraic structures:
+
+  \bigskip
 
 \begin{center}
-\begin{tabular}{  |c|m{7em}|m{12em}| }
-  \hline
-  Freshness Relation & \centering{Data Structure} & \centering{Free Algebraic Structure} \tabularnewline
-  \hline
-  $\leq$, a total order & Sorted lists & Ordered comm. monoid \\
-  $<$, a strict total order & Sorted lists w/o duplicates & Ordered idempotent comm.\ monoid \\
-  $\lambda x. \lambda y. \bot$ & \AgdaDatatype{Maybe} & Pointed set \\
-  $\lambda x. \lambda y. \top$ & \AgdaDatatype{List} & Monoid \\
-  $\neq$ & Lists w/o duplicates & Left-regular band monoid \\
-  $=$ & $1 + (A \times \mathbb{N}^{>0})$ & Reflexive partial monoid \\
-  \hline
-\end{tabular}
+  \begin{tabular}{  |c|m{15em}|m{11em}| }
+    \hline
+    Freshness Relation & \centering{Free Algebraic Structure} & \centering{Data Structure} \tabularnewline
+                                                                \hline
+                                                                $\leq$, a total order & Ordered Commutative Monoid & Sorted lists \\
+    $<$, a strict total order & Ordered Idempotent Comm.\ Monoid & Sorted lists w/o duplicates \\
+    $\lambda x. \lambda y. \bot$ & Pointed Set & \AgdaDatatype{Maybe} \\
+    $\lambda x. \lambda y. \top$ & Monoid & \AgdaDatatype{List} \\
+    $\neq$ & Left-Regular Band Monoid & Lists without duplicates \\
+    $=$ & Reflexive Partial Monoid & $1 + (A \times \mathbb{N}^{>0})$ \\
+    \hline
+  \end{tabular}
 \end{center}
 \end{frame}
 
@@ -275,15 +324,20 @@ This follows by appeal to decidability.
 
 \begin{itemize}
   \item We saw the data type of (generalised) fresh lists.
+  \smallskip
   \item We saw how they realise finite sets and multisets, and proved the relevant universal properties.
+  \smallskip
   \item We glimpsed the zoo of other free algebraic structures that can be represented this way.
 \end{itemize}
 
- Read our stuff:
+\bigskip
+
+ Further reading:
 \begin{itemize}
   \item Kupke, C., Nordvall Forsberg, F., Watters, S.: \emph{A fresh look at commutativity: free algebraic structures via fresh lists}. In: APLAS '23. \\
+  \smallskip
         \url{https://doi.org/10.1007/978-981-99-8311-7_7}
-  \item Our Agda formalisation: \url{https://seanwatters.uk/agda/fresh-lists}
+  \item Full Agda formalisation: \url{https://seanwatters.uk/agda/fresh-lists}
 \end{itemize}
 \end{frame}
 
@@ -291,16 +345,22 @@ This follows by appeal to decidability.
 
 A few reasons:
 \begin{itemize}
+  \smallskip
 \item It breaks the adjunction.
+  \smallskip
 \item We get a (subjectively) more natural notion of functoriality without it.
+  \smallskip
 \item It's an implementation detail.
+  \smallskip
 \item Without it, we get a nice result relating our constructions back to classical finite (multi)sets:
 \end{itemize}
+\bigskip
 
  If only there was a ``free strict total order on a set'', then we could ignore the ordering data and obtain the genuine $\mathcal{P}_{f}$.
  But such a thing is a weak form of AC called the Ordering Principle, which implies LEM.
  However:
 
+\bigskip
 \begin{block}{Theorem}
 Assuming OP, $\mathsf{Set} \cong \mathsf{STO}$, $\mathsf{OICMon} \cong \mathsf{ICMon}$, etc.
 \end{block}
@@ -310,10 +370,17 @@ Assuming OP, $\mathsf{Set} \cong \mathsf{STO}$, $\mathsf{OICMon} \cong \mathsf{I
 \begin{frame}{References}
 \begin{itemize}
   \item Coquand, C.: \emph{A formalised proof of the soundness and completeness of a simply
-        typed lambda-calculus with explicit substitutions}. In: Higher Order Symbolic Computation, 2002. \\
+        typed lambda-calculus with explicit substitutions}.\\
         \url{https://doi.org/10.1023/A:1019964114625}
-  \item Choudhury, V., Fiore, M.: \emph{Free commutative monoids in Homotopy Type Theory}. In: MFPS '22. \\
+  \smallskip
+  \item Choudhury, V., Fiore, M.: \emph{Free commutative monoids in Homotopy Type Theory}.\\
         \url{https://doi.org/10.46298/entics.10492}
+  \smallskip
+  \item Joram, P., Veltri, N.: \emph{Constructive final semantics of finite bags}.\\
+        \url{https://doi.org/10.4230/LIPIcs.ITP.2023.20}
+  \smallskip
+  \item Appel, A.W., Leroy, X.: \emph{Efficient extensional binary tries}.\\
+        \url{https://doi.org/10.1007/s10817-022-09655-x}
 \end{itemize}
 \end{frame}
 
