@@ -1,0 +1,226 @@
+\documentclass[aspectratio=43]{beamer}
+\usetheme{Boadilla}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{unicode-math}
+\usepackage{mathtools}
+\usepackage[conor]{agda}
+\usepackage[normalem]{ulem}
+
+\setmathfont{XITS Math}
+\input{latex/snippets} % agda code snippets
+
+% manual agdfa typesetting
+\newcommand{\xvar}{\AgdaBound{$x$}}
+\newcommand{\yvar}{\AgdaBound{$y$}}
+\newcommand{\nil}{\AgdaField{$[]$}}
+\newcommand{\cons}{\AgdaField{$\dblcolon$}}
+\newcommand{\phitm}{\AgdaFunction{$\phi$}}
+\newcommand{\datatm}{\AgdaDatatype{Tm}}
+\newcommand{\abstm}{\AgdaField{abs}}
+\newcommand{\union}{\AgdaFunction{$\cup$}}
+
+\title[$\mu$-Calculus 101]{The Madness of the Modal $\mu$-Calculus}
+\subtitle{Not your granny's syntax with binding!}
+\author[S. Watters]{Sean Watters}
+\institute{University of Strathclyde}
+\date{2024}
+
+\begin{document}
+
+
+\begin{frame}
+  \titlepage{}
+\end{frame}
+
+\begin{frame}{Plan}
+\begin{enumerate}
+\item Introduction to the $\mu$-calculus (\emph{30 mins}).
+\item Introduction to well-scoped de Bruijn syntax (\emph{15 mins}).
+\item \emph{Sublimely}-scoped de Bruijn syntax for the $\mu$-calculus (\emph{? mins}).
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Logic as a Specification Language}
+  % semantics is all about models. eg, truth tables for propositional logic, boolean algebras for FO-logic
+  % model checking problem: given a model and a formula, does the formula hold in the model?
+  % model checking as formal verification: models as systems, formulas as specs
+  % what sort of mathematical models are good for this task?
+\end{frame}
+
+\begin{frame}{Propositional Logic}
+  % attempt 1: are truth tables good enough? prop logic: decidable yes, expressive no.
+  % attempt 2: FO-logic? oh, not decidable...
+\end{frame}
+
+\begin{frame}{Modal Logic}
+  % attempt 3: back to propositional logic. but what if we had multiple distinct models of it, connected in a state-transition system?
+  % Kripke semantics, box and diamond
+  % more expressive logics for kripke models: LTL, CTL, PDL
+\end{frame}
+
+\begin{frame}{The Modal $\mu$-Calculus}
+  % subsumes all of the above.
+  % note: strict positivity
+  % mention semantics; classical, game, container
+\end{frame}
+
+\begin{frame}{Fixpoint Unfolding}
+  % it's the whole point
+  % substitution (hand wavy, will do properly with dB in part 2)
+\end{frame}
+
+\begin{frame}{The Closure}
+  % direct definition...terminating?
+  % insability under alpha equivalence
+  % relationship to model checking
+\end{frame}
+
+% expansion map, and closure via that? no, probably should skip that
+
+\begin{frame}{De Bruijn Syntax}
+  % basic, non-dependent version
+\end{frame}
+
+\begin{frame}{Well-Scoped De Bruijn Syntax}
+  % now with fams and fins
+\end{frame}
+
+\begin{frame}{Parallel Substitution}
+  % the standard formulation of substitution
+  % definition of unfolding
+\end{frame}
+
+\begin{frame}{The Challenge}
+  % trying to prove correctness of the closure is hard;
+  % trying to reason about a graph-like thing in a tree-like manner is a bad smell;
+  % would need all sorts of painful ad-hoc bookkeeping.
+  % key insight: lets bake the data into the type instead.
+  % also mention: rational data, Hamana's inductive graphs as trees with backedges and sharing
+\end{frame}
+
+\begin{frame}{Fancier Contexts}
+  % the fancier contexts
+\end{frame}
+
+\begin{frame}{Sublimely-Scoped De Bruijn Syntax}
+  % our fancier formulas
+\end{frame}
+
+
+%
+%\begin{frame}{Kripke Semantics}
+  %Propositional logic:
+  %\begin{itemize}
+    %\item Has good decidability/computational properties.
+    %\item Is not very expressive.
+  %\end{itemize}
+%
+  %\bigskip
+%
+  %We can extend it to FO logic, but lose decidability.
+%
+  %\bigskip
+%
+  %Idea: What if we could extend it in other ways, while keeping
+%
+  %Kripke Semantics:
+  %\begin{itemize}
+    %\item Given a set $P$ of propositions, a model of propositional logic is a function $P \to 2$.
+  %\end{itemize}
+%
+  %\begin{tikzpicture}[->,shorten >=1pt,auto,node distance=2cm,
+                    %semithick]
+  %\tikzstyle{every state}=[fill=red,draw=none,text=white]
+%
+  %\node[initial,state] (A)                    {$Q_{0}$};
+  %\node[state]         (B) [above right of=A] {$Q_{1}$};
+  %\node[state]         (D) [below right of=A] {$Q_{2}$};
+  %\node[state]         (C) [below right of=B] {$Q_{3}$};
+  %\node[state]         (E) [below of=D]       {$Q_{4}$};
+%
+  %\path (A) edge              node {} (B)
+            %edge              node {} (C)
+        %(B) edge [loop above] node {} (B)
+            %edge              node {} (C)
+        %(C) edge              node {} (D)
+            %edge [bend left]  node {} (E)
+        %(D) edge [loop below] node {} (D)
+            %edge              node {} (A)
+        %(E) edge [bend left]  node {} (A);
+  %\end{tikzpicture}
+%\end{frame}
+%
+%\begin{frame}{The Propositional Modal $\mu$-calculus}
+  %Given a set of variable names $P$ with $p,x \in P$ :
+%\begin{equation*}
+%L_{\mu}~:=~\top~|~\bot~|~p~|~\lnot p~|~\varphi \land \psi~|~\varphi \lor \psi~|~\Box \varphi~|~\Diamond \varphi~|~\mu{}x.\varphi{}~|~\nu{}x.\varphi{}
+%\end{equation*}
+%
+%\bigskip
+%
+%Essentially, this is:
+%\begin{itemize}
+  %\item Propositional logic,
+  %\item Plus the modal operators $\Box$ and $\Diamond$,
+  %\item Plus the least and greatest fixpoint operators $\mu$ and $\nu$.
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Fixpoint Unfolding}
+  %For any fixpoint formula of the form $\mu{}x.\varphi{}$, we have:
+  %\begin{equation*}
+    %\mu{}x.\varphi \equiv \varphi[x~/~\mu{}x.\varphi{}]
+  %\end{equation*}
+  %(And dually for $\nu$.)
+%
+  %\bigskip
+%
+  %eg:
+  %\begin{align*}
+    %&\nu{}x.p \land \Box{}x \\
+    %\equiv~&p \land \Box{}(\nu{}x.p \land \Box{}x) \\
+    %\equiv~&p \land \Box{}(p \land \Box{}(\nu{}x.p \land \Box{}x)) \\
+    %\equiv~&\ldots{}
+  %\end{align*}
+%
+  %\bigskip
+%
+  %Surprising(?) fact: For any formula $\varphi$, take the set of formulas closed under direct subformulas of propositional and modal formulas, and unfoldings of fixpoints. This set is always finite.
+%\end{frame}
+%
+%\begin{frame}{The Fischer-Ladner Closure}
+  %\begin{definition}[The Closure of $\phi$]
+    %The least set of formulas which contains $\phi$ and is closed under taking direct subformulas of propositional and modal subformulas, and unfolding fixpoint subformulas.
+  %\end{definition}
+  %\bigskip
+%
+  %The closure is highly important in the study of the $\mu$-calculus, but\ldots{}
+%
+  %\begin{center}
+  %\textbf{It is not invarient under $\alpha$-equivalence!}
+  %\end{center}
+%
+  %\bigskip
+%
+  %For example, we have:
+  %\begin{align*}
+  %&\mu{}x.(\Diamond{}x \land \Box{}(\nu{}y.\mu{}z.(\Diamond{}z \land \Box{}y)))\\
+  %\equiv~&\mu{}x.(\Diamond{}x \land \Box{}(\nu{}y.\mu{}x.(\Diamond{}x \land \Box{}y)))
+  %\end{align*}
+%
+  %But their closures are different!
+%
+%\end{frame}
+%
+%\begin{frame}{De Bruijn to the Rescue?}
+  %\snippetwellscoped{}
+  %\snippetscope{}
+%\end{frame}
+%
+%\begin{frame}{\sout{Well} \emph{Sublimely}-Scoped Formulas}
+  %\snippetsublimelyscoped{}
+%\end{frame}
+
+\end{document}
