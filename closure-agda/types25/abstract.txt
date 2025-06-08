@@ -1,0 +1,17 @@
+Title:
+The Madness of the Modal $\mu$-Calculus
+
+
+Abstract:
+
+In this talk, I'll give you the "what", "why", and "how" of the $\mu$-calculus --- what it is, why I find it interesting (and hopefully why you should too!), and how to tame it in Agda.
+
+I'll start by introducing and motivating the field of model checking, before quickly diverting to the modal $\mu$-calulus, a fixpoint modal logic of foundational importance in that field.
+I'll talk about its semantics first, beacause that's only sensible, then the rest of the talk will be devoted to the weird and wonderful (but mostly weird) syntactic issues that arise from this formalism.
+In particular, there is an important syntactic construction called "the closure" of a $\mu$-calculus formula which is not stable under alpha-equivalence, and whose inductive structure is somewhat non-obvious.
+
+In the second half, we'll code up an implementation of the $\mu$-calculus in Agda, learning about well-scoped De Bruijn syntax along the way.
+I'll motivate and introduce the technique, then define parallel substitution and weakening, and finish by defining the closure.
+The data type of thinnings between natural numbers, which is never off the whiteboards of LT1310, will feature.
+
+If there's time, I'll discuss an extension of well-scoped de Bruijn syntax that I've been calling "sublimely-scoped" syntax, which is still very WIP.

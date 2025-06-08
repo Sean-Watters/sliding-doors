@@ -1,0 +1,193 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Boadilla}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{mathtools}
+
+\title[Correct-by-Construction $\mu$-Calculus]{Rational Codata as Syntax-with-Binding}
+\subtitle{Correct-by-Construction Foundations of the Modal $\mu$-Calculus}
+\author[S. Watters]{Sean Watters}
+\institute{University of Strathclyde}
+\date{9th June 2025}
+
+
+\newcommand{\meaningof}[1]{\ensuremath{\llbracket #1 \rrbracket}}
+\newcommand{\hiddencell}[2]{\color{red} \action<#1->{#2}}
+
+\begin{document}
+
+
+\begin{frame}
+  \titlepage{}
+\end{frame}
+
+\begin{frame}{Plan}
+\begin{enumerate}
+\item Introduction to the $\mu$-calculus.
+        \smallskip
+\item Presenting rational cotrees as syntax with binding.
+        \smallskip
+\item Proof sketch.
+\end{enumerate}
+\end{frame}
+
+% \begin{frame}{Kripke Semantics}
+
+% \begin{definition}
+%   A \textbf{Kripke model} is a tuple $(S,T,V)$ of a set of states $S$, a transition relation $T : S \to S \to \mathsf{Prop}$, and a valuation function $V : A \to S \to \mathsf{Prop}$ (given some set $A$ of atomic propositions).
+% \end{definition}
+
+% \bigskip
+
+% Notice that:
+% \begin{itemize}
+%   \item $S$ and $T$ induce a (possibly infinite) graph-like structure.
+%         \smallskip
+%   \item Each state $s \in S$ is equipped with a model of propositional logic, $a \mapsto V~a~s$.
+%         \smallskip
+%   \item Partial application of $T$ on some state $s \in S$ yields the ``is a successor of $s$'' predicate.
+% \end{itemize}
+
+% \end{frame}
+
+% \begin{frame}{Modal Logic}
+%   \textbf{Syntax:}
+%   For all propositional atoms $a \in \mathsf{At}$:
+%   \begin{equation*}
+%     \varphi := a~|~\neg \varphi~|~\varphi \land \varphi~|~\varphi \lor \varphi~|~\varphi \Rightarrow \varphi~|~\Box \varphi~|~\Diamond \varphi
+%   \end{equation*}
+
+%   \bigskip
+
+%   \textbf{Semantics:}
+%   Given a Kripke model $\mathcal{M} = (S,T,V)$, let $\meaningof{-}~- : ML \to S \to \mathsf{Prop}$, where:
+%   \begin{align*}
+%     \meaningof{a}~s &:= V~a~s \\
+%     \meaningof{\lnot \varphi}~s &:= \lnot~(\meaningof{\varphi}~s) \\
+%     \meaningof{\varphi \land \psi}~s &:= (\meaningof{\varphi}~s) \times (\meaningof{\psi}~s) \\
+%     \meaningof{\varphi \lor \psi}~s &:= (\meaningof{\varphi}~s) + (\meaningof{\psi}~s) \\
+%     \meaningof{\varphi \Rightarrow \psi}~s &:= (\meaningof{\varphi}~s) \to (\meaningof{\psi}~s) \\
+%     \meaningof{\Box \varphi}~s &:= \forall t \in (T~s).~\meaningof{\varphi}~t \\
+%     \meaningof{\Diamond \varphi}~s &:= \exists t \in (T~s).~\meaningof{\varphi}~t
+%   \end{align*}
+% \end{frame}
+
+
+\begin{frame}{The Modal $\mu$-Calculus}
+  \textbf{Syntax:}
+  For all propositional atoms $a \in \mathsf{At}$ and variable names $x \in \mathsf{Var}$:
+  \begin{equation*}
+    \varphi := a~|~\neg a~|~x~|~\varphi \land \varphi~|~\varphi \lor \varphi~|~\Box \varphi~|~\Diamond \varphi~|~\mu x. \varphi~|~\nu x. \varphi
+  \end{equation*}
+
+  \bigskip
+
+  Notes:
+ \begin{itemize}
+ \item The fixpoint operators $\mu$ and $\nu$ are variable binders.
+ \item The syntax is strictly positive.
+ \item Semantics: Kripke semantics, where $\mu$ and $\nu$ let us reason about unbounded/infinite behaviour.
+ \end{itemize}
+
+  % \textbf{Semantics}:
+  % Given a Kripke model $\mathcal{M}$ and an interpretation of free variables $i : \mathsf{Var} \to S \to \mathsf{Prop}$, let:
+  % \begin{align*}
+  %   \meaningof{x}_{i}~s &:= i~x~s \\
+  %   \meaningof{\mu x.~\varphi}_{i}~s &:= \mu~((U : S \to \mathsf{Prop}) \mapsto \meaningof{\varphi}_{i[x:=U]})~s \\
+  %   \meaningof{\nu x.~\varphi}_{i}~s &:= \nu~((U : S \to \mathsf{Prop}) \mapsto \meaningof{\varphi}_{i[x:=U]})~s
+  % \end{align*}
+
+\end{frame}
+
+\begin{frame}{Fixpoint Unfolding}
+  At the heart of the $\mu$-calculus is the semantic equivalence:
+    \begin{equation*}
+      \eta x.~\varphi~\equiv~\varphi [ x := \eta x.\varphi]
+    \end{equation*}
+
+  We call $\varphi [ x := \eta x.\varphi ]$ the \textbf{unfolding} of $\eta x.~\varphi$.
+
+\bigskip
+
+  For example: let $E(p) := \mu x.~p \lor \Diamond x$. Then:
+  \begin{align*}
+    &E(p) \\
+    \equiv~&p \lor \Diamond(E(p)) \\
+    \equiv~&p \lor \Diamond(p \lor \Diamond(E(p))) \\
+    \equiv~&\ldots
+  \end{align*}
+
+  \bigskip
+
+  % This being a \emph{least} fixpoint says that the formula will be validated in \emph{finitely} many unfoldings.
+
+  % it's the whole point
+  % substitution (hand wavy, will do properly with dB in part 2)
+  % example showing formula semantically equivalent to its unfolding. Show repeated unfoldings to intuit mu/nu
+\end{frame}
+
+\begin{frame}{The Closure}
+  \begin{definition}
+    The \textbf{closure} of a formula $\varphi$ is the minimal set which contains $\varphi$, and is closed under taking unfoldings of fixpoint formulas, and direct subformulas of non-fixpoint formulas.
+  \end{definition}
+
+  \bigskip
+
+  In other words, it is the minimal set $C$ satisfying:
+    \begin{align*}
+      &\varphi \in C \\
+      \bigcirc \varphi \in C \Rightarrow~&\varphi \in C,~\mathsf{where}~\bigcirc \in \{\Box,\Diamond\} \\
+      \varphi \star \psi \in C \Rightarrow~&\varphi \in C~\mathsf{and}~\psi \in C,~\mathsf{where}~\star \in \{\land,\lor\} \\
+      \eta x. \varphi \in C \Rightarrow~&\varphi [ x := \mu x. \varphi] \in C,~\mathsf{where}~\eta \in \{\mu,\nu\}
+    \end{align*}
+  % insability under alpha equivalence
+  % relationship to model checking
+\end{frame}
+
+\begin{frame}{Finiteness of the Closure (1)}
+  \begin{theorem}
+    For all $\varphi$, the closure of $\varphi$ is finite. (Kozen, 1983)
+  \end{theorem}
+
+  \bigskip
+
+  \textbf{Proof Sketch (Kozen):}
+  \smallskip
+
+ \begin{itemize}
+   \item Define the \emph{expansion} of a formula as the sequential instantiation of all its free variables.
+         \smallskip
+   \item Define an alternative, structurally inductive procedure for computing the closure via the expansion map.
+         \smallskip
+   \item Prove the alternative definition correct by induction.
+ \end{itemize}
+
+ \bigskip
+
+ \begin{center}
+ \textbf{Not so simple in a formal setting!}
+ \end{center}
+
+\end{frame}
+
+\begin{frame}{Finiteness of the Closure (2)}
+  \textbf{Proof Sketch (Our Approach in Agda):}
+  \smallskip
+
+ \begin{enumerate}
+   \item Implement the closure coinductively as a nonwellfounded cotree, via the standard definition. (Trivially correct).
+         \smallskip
+   \item Implement the alternative definition of the closure as an inductive syntax-with-binding representation of a rational cotree (a ``tree with backedges''). (Finite by construction).
+         \smallskip
+   \item Define the ``unfolding'' of such a tree-with-backedges to a cotree.
+         \smallskip
+   \item Prove the coinductive definition closure bisimilar to the unfolding of the inductive approximation.
+         \smallskip
+   \item Prove that we can transport the correctness proofs across the bisimulation, to show that the finite-by-construction algorithm does in fact compute the closure.
+ \end{enumerate}
+\end{frame}
+
+
+\end{document}
