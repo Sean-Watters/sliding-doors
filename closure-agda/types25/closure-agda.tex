@@ -24,13 +24,18 @@
 \end{frame}
 
 \begin{frame}{Plan}
+  We will:
 \begin{enumerate}
-\item Introduction to the $\mu$-calculus.
+\item Introduce the $\mu$-calculus, and its Fischer-Ladner closure.
         \smallskip
-\item Presenting rational cotrees as syntax with binding.
+\item Sketch our (now complete!) formalised proof of the closure's finiteness.
         \smallskip
-\item Proof sketch.
+\item Discuss the presentation of rational cotrees as syntax with binding, its role in the proof, and future plans in this direction.
+        \smallskip
+\item Aim to keep it high-level and skip the gory details!
 \end{enumerate}
+
+
 \end{frame}
 
 % \begin{frame}{Kripke Semantics}
@@ -86,9 +91,20 @@
 
   Notes:
  \begin{itemize}
- \item The fixpoint operators $\mu$ and $\nu$ are variable binders.
- \item The syntax is strictly positive.
- \item Semantics: Kripke semantics, where $\mu$ and $\nu$ let us reason about unbounded/infinite behaviour.
+  \item The fixpoint operators $\mu$ and $\nu$ are variable binders.
+         \smallskip
+  \item The syntax is strictly positive --- this matters when giving semantics to fixpoint formulas.
+         \smallskip
+
+ \end{itemize}
+ \bigskip
+ \textbf{Semantics:}
+ \begin{itemize}
+  \item Kripke semantics, where $\mu$ and $\nu$ let us reason about unbounded/infinite behaviour.
+         \smallskip
+  \item Satisfiability and model checking are decidable.
+         \smallskip
+  \item The $\mu$-calculus subsumes temporal and dynamic logics such as LTL, CTL*, and PDL.
  \end{itemize}
 
   % \textbf{Semantics}:
@@ -156,13 +172,13 @@
   \textbf{Proof Sketch (Kozen):}
   \smallskip
 
- \begin{itemize}
+ \begin{enumerate}
    \item Define the \emph{expansion} of a formula as the sequential instantiation of all its free variables.
          \smallskip
    \item Define an alternative, structurally inductive procedure for computing the closure via the expansion map.
          \smallskip
    \item Prove the alternative definition correct by induction.
- \end{itemize}
+ \end{enumerate}
 
  \bigskip
 
@@ -189,5 +205,35 @@
  \end{enumerate}
 \end{frame}
 
+\begin{frame}{Nonwellfounded Cotrees}
+  % define trees in agda
+\end{frame}
+
+\begin{frame}{Rational Trees}
+  % cite the loopy bois
+  % define scopes and trees in agda
+  % mention equivalence up to renaming, and that this + a thinning between the scopes gets you structural equivalence of trees.
+\end{frame}
+
+\begin{frame}{Unfolding Trees}
+  % define unfolding in agda
+\end{frame}
+
+\begin{frame}{Progress and Future Work}
+\begin{itemize}
+        \item The proof is now finished, and the Agda formalisation is on my GitHub.
+        \smallskip
+        \item What's the general, abstract story about this presentation of rational codata? (Rational fixpoint of containers??)
+        \smallskip
+        \item IMO: The $\mu$-calculus and type theory are ripe for more cross-fertilisation.
+
+\end{itemize}
+
+\bigskip
+
+\begin{center}
+  \Large Thanks!
+\end{center}
+\end{frame}
 
 \end{document}
