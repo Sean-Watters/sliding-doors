@@ -16,6 +16,9 @@
 \newcommand{\meaningof}[1]{\ensuremath{\llbracket #1 \rrbracket}}
 \newcommand{\hiddencell}[2]{\color{red} \action<#1->{#2}}
 
+\usepackage{agda}
+\input{latex/snippets}
+
 \begin{document}
 
 
@@ -97,6 +100,8 @@
          \smallskip
 
  \end{itemize}
+
+ \pause
  \bigskip
  \textbf{Semantics:}
  \begin{itemize}
@@ -123,11 +128,12 @@
       \eta x.~\varphi~\equiv~\varphi [ x := \eta x.\varphi]
     \end{equation*}
 
-  We call $\varphi [ x := \eta x.\varphi ]$ the \textbf{unfolding} of $\eta x.~\varphi$.
+  We call $\varphi [ x := \eta x.\varphi ]$ the \textbf{unfolding} of $\eta x.\varphi$.
 
 \bigskip
 
   For example: let $E(p) := \mu x.~p \lor \Diamond x$. Then:
+\pause
   \begin{align*}
     &E(p) \\
     \equiv~&p \lor \Diamond(E(p)) \\
@@ -158,8 +164,6 @@
       \varphi \star \psi \in C \Rightarrow~&\varphi \in C~\mathsf{and}~\psi \in C,~\mathsf{where}~\star \in \{\land,\lor\} \\
       \eta x. \varphi \in C \Rightarrow~&\varphi [ x := \mu x. \varphi] \in C,~\mathsf{where}~\eta \in \{\mu,\nu\}
     \end{align*}
-  % insability under alpha equivalence
-  % relationship to model checking
 \end{frame}
 
 \begin{frame}{Finiteness of the Closure (1)}
@@ -193,47 +197,72 @@
   \smallskip
 
  \begin{enumerate}
-   \item Implement the closure coinductively as a nonwellfounded cotree, via the standard definition. (Trivially correct).
+   \item Implement the closure coinductively as a non-wellfounded cotree, via the standard definition. (Trivially correct).
+         \pause
          \smallskip
-   \item Implement the alternative definition of the closure as an inductive syntax-with-binding representation of a rational cotree (a ``tree with backedges''). (Finite by construction).
+   \item Implement the alternative definition of the closure as an inductive syntax-with-binding representation of a rational cotree (a ``tree with back-edges''). (Finite by construction).
+         \pause
          \smallskip
-   \item Define the ``unfolding'' of such a tree-with-backedges to a cotree.
+   \item Define the ``unfolding'' of such a tree-with-back-edges to a cotree.
+         \pause
          \smallskip
    \item Prove the coinductive definition closure bisimilar to the unfolding of the inductive approximation.
+         \pause
          \smallskip
    \item Prove that we can transport the correctness proofs across the bisimulation, to show that the finite-by-construction algorithm does in fact compute the closure.
  \end{enumerate}
 \end{frame}
 
-\begin{frame}{Nonwellfounded Cotrees}
-  % define trees in agda
+\begin{frame}{Non-Wellfounded Cotrees}
+  \snippetcotree
 \end{frame}
 
 \begin{frame}{Rational Trees}
-  % cite the loopy bois
-  % define scopes and trees in agda
-  % mention equivalence up to renaming, and that this + a thinning between the scopes gets you structural equivalence of trees.
+  \textbf{Key Insight:} Variables are pointers to their binders! (Ghani, Hamana, Uustalu \& Vene, 2006).
+
+  \bigskip
+
+  \snippetrational
 \end{frame}
 
 \begin{frame}{Unfolding Trees}
-  % define unfolding in agda
+  \snippetunfolding
 \end{frame}
 
-\begin{frame}{Progress and Future Work}
-\begin{itemize}
-        \item The proof is now finished, and the Agda formalisation is on my GitHub.
-        \smallskip
-        \item What's the general, abstract story about this presentation of rational codata? (Rational fixpoint of containers??)
-        \smallskip
-        \item IMO: The $\mu$-calculus and type theory are ripe for more cross-fertilisation.
+\begin{frame}{Progress}
 
-\end{itemize}
+\begin{theorem}
+  The direct coinductive definition of the closure is bisimilar to the unfolding of the inductive syntax-with-binding definition.
+\end{theorem}
 
 \bigskip
 
-\begin{center}
-  \Large Thanks!
-\end{center}
+\begin{theorem}
+Let T be the tree with back-edges produced by the inductive closure algorithm
+applied to $\varphi$.
+Then for all formulas $\psi$, there is a path to $\psi$ in T iff there is a path to $\psi$ in the closure of $\phi$. That is, T really is the closure of $\varphi$.
+\end{theorem}
+
+\bigskip
+
+To-do/future work:
+\begin{itemize}
+        \item Tighten the size bounds.
+        \smallskip
+        \item What's the general, abstract story about this presentation of rational codata? (Rational fixpoint of containers??)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Thanks!}
+References:
+\smallskip
+\begin{itemize}
+\item \emph{Results on the Propositional $\mu$-Calculus.} Kozen, 1983.
+        \smallskip
+\item \emph{Representing Cyclic Structures as Nested Datatypes.} Ghani, Hamana, Uustalu \& Vene, 2006.
+\end{itemize}
+
 \end{frame}
 
 \end{document}

@@ -18,78 +18,94 @@
 \newunicodechar{ψ}{\ensuremath{\mathnormal{\psi}}}
 \newunicodechar{η}{\ensuremath{\mathnormal{\eta}}}
 \newunicodechar{≈}{\ensuremath{\mathnormal{\approx}}}
+\newunicodechar{∞}{\ensuremath{\mathnormal{\infty}}}
+\newunicodechar{Γ}{\ensuremath{\mathnormal{\Gamma}}}
+\newunicodechar{Δ}{\ensuremath{\mathnormal{\Delta}}}
 
 %%%%%%%%%%
 % agda preamble
 
 \begin{code}[hide]
-
+{-# OPTIONS --guardedness #-}
 open import Data.Nat hiding (_≟_)
 open import Data.Fin using (Fin; zero; suc; _≟_) renaming (inject₁ to fin-inject₁)
 open import Data.Product
 open import Relation.Binary.PropositionalEquality
 open import Relation.Nullary.Decidable
 
-data Opη : Set where
-  mu nu : Opη
-
-data Op₀ (At : Set) : Set where
-  tt ff : Op₀ At
-  at ¬at : At → Op₀ At
-
-data Op₁ : Set where
-  box dia : Op₁
-
-data Op₂ : Set where
-  and or : Op₂
 
 \end{code}
 
 %%%%%%%%%%
 % agda snippets
 
-\newcommand{\snippetwellscoped}{%
-\begin{code}
-data WST (At : Set) (n : ℕ) : Set where
-  tt ff      : WST At n
-  at ¬at     : At → WST At n
-  and or     : (ϕ ψ : WST At n) → WST At n
-  box dia : (ϕ : WST At n) → WST At n
-  mu nu      : (ϕ : WST At (suc n)) → WST At n
-  var        : Fin n → WST At n
-\end{code}}
-
-\begin{code}[hide]
-data IsFP {At : Set} {n : ℕ} : WST At n → Set where
-  mu : (ϕ : WST At (suc n)) → IsFP (mu ϕ)
-  nu : (ϕ : WST At (suc n)) → IsFP (nu ϕ)
-\end{code}
-
-\newcommand{\snippetscope}{%
-\begin{code}
-data Scope (At : Set) : ℕ → Set where
-  [] : Scope At zero
-  _-,_ : ∀ {n} (Γ₀ : Scope At n) {ϕ : WST At n}
-       → (Γ₀ : IsFP ϕ) → Scope At (suc n)
-\end{code}}
-
-\newcommand{\snippetsublimelyscoped}{%
+\newcommand{\snippetcotree}{%
 \begin{code}
 mutual
-  data SST (At : Set) {n : ℕ} (Γ : Scope At n) : Set where
-    -- other constructors here...
-    var : (x : Fin n) → SST At Γ
-    mu  : {ψ : WST At (suc n)}
-        → (ϕ : SST At (Γ -, mu ψ))
-        → ψ ≈ ϕ
-        → SST At Γ
+  record ∞NWFTree (X : Set) : Set where
+    coinductive
+    field
+      head : X
+      subtree : NWFTree X
 
-  data _≈_ {At : Set} {n : ℕ} {Γ : Scope At n}
-    : WST At n → SST At Γ → Set where
-    -- other constructors here...
-    var : (x : Fin n) → (var x) ≈ (var x)
-    mu  : {ϕ : WST At (suc n)}
-        → {ϕ' : SST At (Γ -, mu ϕ)}
-        → (p : ϕ ≈ ϕ')
-        → mu ϕ ≈ mu ϕ' p
+  data NWFTree (X : Set) : Set where
+    leaf : NWFTree X
+    node1 : ∞NWFTree X → NWFTree X
+    node2 : ∞NWFTree X → ∞NWFTree X → NWFTree X
+    nodeη : ∞NWFTree X → NWFTree X
+
+\end{code}}
+
+\newcommand{\snippetrational}{%
+\begin{code}
+mutual
+  data RTree (X : Set) (n : ℕ) : Set where
+    step : (x : X) → (t : RTree-step X n) → RTree X n
+    var  : (x : Fin n) → RTree X n
+
+  data RTree-step (X : Set) (n : ℕ) : Set where
+    leaf  : RTree-step X n
+    node1 : RTree X n → RTree-step X n
+    node2 : RTree X n → RTree X n → RTree-step X n
+    nodeη : RTree X (suc n) → RTree-step X n
+\end{code}
+\begin{code}[hide]
+data NonVar {X : Set} {n : ℕ} : RTree X n → Set where
+  instance step : ∀ {x t} → NonVar (step x t)
+\end{code}
+\begin{code}
+data Scope (X : Set) : ℕ → Set where
+  []  : Scope X zero
+  _∷_ : ∀ {n} → (t : RTree X n) → {{_ : NonVar t}}
+      → (Γ₀ : Scope X n) → Scope X (suc n)
+\end{code}}
+
+
+%-- \newcommand{\snippetscope}{%
+%-- \begin{code}
+%-- data Scope (X : Set) : ℕ → Set where
+%--   []  : Scope X zero
+%--   _∷_ : ∀ {n} → (t : RTree X n) → {{_ : NonVar t}}
+%--       → (Γ₀ : Scope X n) → Scope X (suc n)
+%-- \end{code}}
+
+\newcommand{\snippetunfolding}{%
+\begin{code}
+head : ∀ {X n} → (Γ : Scope X n) → RTree X n → X
+head Γ       (step x t)    = x
+head (t ∷ Γ) (var zero)    = head Γ t
+head (t ∷ Γ) (var (suc x)) = head Γ (var x)
+
+mutual
+  unfold : ∀ {X n} → (Γ : Scope X n) → RTree X n → ∞NWFTree X
+  unfold Γ t .∞NWFTree.head    = head Γ t
+  unfold Γ t .∞NWFTree.subtree = unfold-subtree Γ t
+
+  unfold-subtree : ∀ {X n} → (Γ : Scope X n) → RTree X n → NWFTree X
+  unfold-subtree Γ (step x leaf)          = leaf
+  unfold-subtree Γ (step x (node1 t))     = node1 (unfold Γ t)
+  unfold-subtree Γ (step x (node2 tl tr)) = node2 (unfold Γ tl) (unfold Γ tr)
+  unfold-subtree Γ (step x (nodeη t))     = nodeη (unfold ((step x (nodeη t)) ∷ Γ) t)
+  unfold-subtree (t ∷ Γ) (var zero)       = unfold-subtree Γ t
+  unfold-subtree (t ∷ Γ) (var (suc x))    = unfold-subtree Γ (var x)
 \end{code}}
